@@ -531,6 +531,12 @@ define pcodeop syscall;
         *(addr) = valStore | valOrig;
     }
 
+    :sdl RTsrc, OFF_BASE            is prime=44 & OFF_BASE & RTsrc & PAIR_INSTRUCTION_FLAG=1 [ PAIR_INSTRUCTION_FLAG = 1; globalset(inst_next, PAIR_INSTRUCTION_FLAG);] {
+    }
+    :sdr RTsrc, OFF_BASE            is prime=45 & OFF_BASE & RTsrc & PAIR_INSTRUCTION_FLAG=1 [ PAIR_INSTRUCTION_FLAG = 0; ] {
+        *[ram]:8 OFF_BASE = RTsrc;
+    }
+
     # 1010 01bb bbbt tttt iiii iiii iiii iiii
     :sh RTsrc, OFF_BASE             		is prime=41 & OFF_BASE & RTsrc {
         *[ram]:2 OFF_BASE = RTsrc:2;
