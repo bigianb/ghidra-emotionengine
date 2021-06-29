@@ -178,6 +178,7 @@ define context contextreg
     cM=(1,1)
     cE=(2,2) noflow
     cUpper=(3,3) noflow
+    PAIR_INSTRUCTION_FLAG=(4,4) noflow      # =1 paired instruction
 ;
 
 # 64 bit

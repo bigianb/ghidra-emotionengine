@@ -12,6 +12,7 @@
             <set name="microMode" val="1" description="vu micro mode"/>
         </context_set>
         <context_set space="ram">
+            <set name="PAIR_INSTRUCTION_FLAG" val="0" description="1 if LWL/LWR instruction is a pair"/>
             <set name="cM" val="0" description="vu M bit"/>
             <set name="cE" val="0" description="vu E bit"/>
             <set name="cUpper" val="0" description="vu1 upper instruction flag"/>

@@ -46,6 +46,12 @@ dependencies {
 	runtimeOnly fileTree(dir: ghidraInstallDir + '/Ghidra/Processors', include: "**/*.jar")
 }
 
+test {
+    useJUnit()
+
+    maxHeapSize = '1G'
+}
+
 eclipse.classpath.file.whenMerged {
 	File javaDoc = new File(ghidraInstallDir+"/docs/GhidraAPI_javadoc.zip");
 	def destroy = [];
