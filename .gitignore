@@ -42,3 +42,4 @@ hs_err_pid*
 # vscode generated files
 *.vscode
 
+.DS_Store
