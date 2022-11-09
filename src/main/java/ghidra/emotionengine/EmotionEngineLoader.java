@@ -164,10 +164,11 @@ public class EmotionEngineLoader extends ElfLoader {
 	}
 
 	@Override
-	protected void postLoadProgramFixups(List<Program> importedPrograms, DomainFolder importFolder,
+	protected void postLoadProgramFixups(List<LoadedProgram> loadedPrograms,
 			List<Option> options, MessageLog messageLog, TaskMonitor monitor)
 			throws CancelledException, IOException {
-		for (Program program : importedPrograms) {
+		for (LoadedProgram loadedProgram : loadedPrograms) {
+			Program program = loadedProgram.program();
 			monitor.checkCanceled();
 			int id = program.startTransaction(RELOCATION_TRANSACTION_MESSAGE);
 			// TODO setup heap memory block if applicable
@@ -229,7 +230,7 @@ public class EmotionEngineLoader extends ElfLoader {
 			}
 			program.endTransaction(id, true);
 		}
-		super.postLoadProgramFixups(importedPrograms, importFolder, options, messageLog, monitor);
+		super.postLoadProgramFixups(loadedPrograms, options, messageLog, monitor);
 	}
 
 	@Override

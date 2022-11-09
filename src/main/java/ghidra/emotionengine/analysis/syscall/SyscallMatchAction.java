@@ -12,6 +12,11 @@ import ghidra.xml.XmlPullParser;
 final class SyscallMatchAction implements MatchAction {
 
 	static final String BIOS = "BIOS";
+	//  li v1, ...
+	//  syscall
+	//  jr ra
+	//  nop
+	//
 	static final DittedBitSequence BYTE_SEQUENCE =
 		new DittedBitSequence(
 			"0x.. 0x.. 0x03 0x24 0x0C 0x00 0x00 0x00 0x08 0x00 0xE0 0x03 0x00 0x00 0x00 0x00");

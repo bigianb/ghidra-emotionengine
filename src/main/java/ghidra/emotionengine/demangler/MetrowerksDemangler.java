@@ -3,7 +3,7 @@ package ghidra.emotionengine.demangler;
 import ghidra.app.util.demangler.*;
 import ghidra.program.model.listing.Program;
 import ghidra.program.model.util.PropertyMapManager;
-import ghidra.program.model.util.TypeMismatchException;
+import ghidra.util.map.TypeMismatchException;
 import ghidra.util.classfinder.ExtensionPointProperties;
 
 @ExtensionPointProperties(priority = 2)
@@ -26,6 +26,7 @@ public class MetrowerksDemangler implements Demangler {
 		}
 	}
 
+	
 	@Override
 	public DemangledObject demangle(String mangled, boolean demangleOnlyKnownPatterns) {
 		return MangledCodeWarriorSymbol.demangleSymbol(mangled);
