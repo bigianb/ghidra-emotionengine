@@ -6,7 +6,7 @@ define pcodeop trap;
 define pcodeop prefetch;
 define pcodeop syscall;
 
-    with : microMode=0 {
+with : microMode=0 {
 
     # 0000 00ss ssst tttt dddd d000 0010 0000
     :add RD32, RS32src, RT32src				is prime=0 & zero5=0 & fct=32 & RD32 & RS32src & RT32src & RD {
@@ -357,16 +357,6 @@ define pcodeop syscall;
         RT = valOrig | valLoad;
     }
 
-    # ldl and ldr almost always come in pairs.
-    # When the analyzer does finds a matching ldl/ldr pair, the pcode is simplified so that
-    # ldl does all the loading while ldr is a no-op
-
-    :ldl RT, OFF_BASE               is prime=26 & OFF_BASE & RT & PAIR_INSTRUCTION_FLAG=1 [ PAIR_INSTRUCTION_FLAG = 1; globalset(inst_next, PAIR_INSTRUCTION_FLAG);] {
-    }
-    :ldr RT, OFF_BASE               is prime=27 & OFF_BASE & RT & PAIR_INSTRUCTION_FLAG=1 [ PAIR_INSTRUCTION_FLAG = 0; ] {
-        RT = *[ram]:8 OFF_BASE;
-    }
-
     # 1000 01bb bbbt tttt iiii iiii iiii iiii
     :lh RT, OFF_BASE                		is prime=33 & OFF_BASE & RT {
         RT = sext(*[ram]:2 OFF_BASE);
@@ -529,12 +519,6 @@ define pcodeop syscall;
         valOrig:8 = *(addr) & (0xffffffffffffffff >> ((8-shft) * 8));
         valStore:8 = RTsrc << (shft*8);
         *(addr) = valStore | valOrig;
-    }
-
-    :sdl RTsrc, OFF_BASE            is prime=44 & OFF_BASE & RTsrc & PAIR_INSTRUCTION_FLAG=1 [ PAIR_INSTRUCTION_FLAG = 1; globalset(inst_next, PAIR_INSTRUCTION_FLAG);] {
-    }
-    :sdr RTsrc, OFF_BASE            is prime=45 & OFF_BASE & RTsrc & PAIR_INSTRUCTION_FLAG=1 [ PAIR_INSTRUCTION_FLAG = 0; ] {
-        *[ram]:8 OFF_BASE = RTsrc;
     }
 
     # 1010 01bb bbbt tttt iiii iiii iiii iiii

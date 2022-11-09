@@ -1,0 +1,863 @@
+# MAC Flags
+@define Zw MAC[0,1]
+@define Zz MAC[1,1]
+@define Zy MAC[2,1]
+@define Zx MAC[3,1]
+@define Sw MAC[4,1]
+@define Sz MAC[5,1]
+@define Sy MAC[6,1]
+@define Sx MAC[7,1]
+@define Uw MAC[8,1]
+@define Uz MAC[9,1]
+@define Uy MAC[10,1]
+@define Ux MAC[11,1]
+@define Ow MAC[12,1]
+@define Oz MAC[13,1]
+@define Oy MAC[14,1]
+@define Ox MAC[15,1]
+
+# MAC Flags
+@define MACZ MAC[0,4]
+@define MACS MAC[4,4]
+@define MACU MAC[8,4]
+@define MACO MAC[12,4]
+
+# Status Flags
+@define Z vuStatus[0,1]
+@define S vuStatus[1,1]
+@define U vuStatus[2,1]
+@define O vuStatus[3,1]
+@define I vuStatus[4,1]
+@define D vuStatus[5,1]
+@define ZS vuStatus[6,1]
+@define SS vuStatus[7,1]
+@define US vuStatus[8,1]
+@define OS vuStatus[9,1]
+@define IS vuStatus[10,1]
+@define DS vuStatus[11,1]
+
+VABSX: is vudest & VUFTX & VUFSX {
+	VUFTX = abs(VUFSX);
+}
+
+VABSX: is vudest & vudestx=0 {}
+
+VABSY: is vudest & VUFTY & VUFSY {
+	VUFTY = abs(VUFSY);
+}
+
+VABSY: is vudest & vudesty=0 {}
+
+VABSZ: is vudest & VUFTZ & VUFSZ {
+	VUFTZ = abs(VUFSZ);
+}
+
+VABSZ: is vudest & vudestz=0 {}
+
+VABSW: is vudest & VUFTW & VUFSW {
+	VUFTW = abs(VUFSW);
+}
+
+VABSW: is vudest & vudestw=0 {}
+
+VADDX: is vudestx & VUOP0X & VUOP2X & VUFSX {
+	VUOP0X = VUFSX f+ VUOP2X;
+	$(Zx) = VUOP0X f== 0;
+	$(Sx) = VUOP0X f< 0;
+	$(Ux) = nan(f- VUOP0X);
+	$(Ox) = nan(VUOP0X);
+}
+
+VADDX: is vudest & vudestx=0 {
+	$(Zx) = 0;
+	$(Sx) = 0;
+	$(Ux) = 0;
+	$(Ox) = 0;
+}
+
+VADDY: is vudestx & VUOP0Y & VUOP2Y & VUFSY {
+	VUOP0Y = VUFSY f+ VUOP2Y;
+	$(Zy) = VUOP0Y f== 0;
+	$(Sy) = VUOP0Y f< 0;
+	$(Uy) = nan(f- VUOP0Y);
+	$(Oy) = nan(VUOP0Y);
+}
+
+VADDY: is vudest & vudesty=0 {
+	$(Zy) = 0;
+	$(Sy) = 0;
+	$(Uy) = 0;
+	$(Oy) = 0;
+}
+
+VADDZ: is vudestz & VUOP0Z & VUOP2Z & VUFSZ {
+	VUOP0Z = VUFSZ f+ VUOP2Z;
+	$(Zz) = VUOP0Z f== 0;
+	$(Sz) = VUOP0Z f< 0;
+	$(Uz) = nan(f- VUOP0Z);
+	$(Oz) = nan(VUOP0Z);
+}
+
+VADDZ: is vudest & vudestz=0 {
+	$(Zz) = 0;
+	$(Sz) = 0;
+	$(Uz) = 0;
+	$(Oz) = 0;
+}
+
+VADDW: is vudestw & VUOP0W & VUOP2W & VUFSW {
+	VUOP0W = VUFSW f+ VUOP2W;
+	$(Zw) = VUOP0W f== 0;
+	$(Sw) = VUOP0W f< 0;
+	$(Uw) = nan(f- VUOP0W);
+	$(Ow) = nan(VUOP0W);
+}
+
+VADDW: is vudest & vudestw=0 {
+	$(Zw) = 0;
+	$(Sw) = 0;
+	$(Uw) = 0;
+	$(Ow) = 0;
+}
+
+VADD: is VADDX & VADDY & VADDZ & VADDW {
+	build VADDX;
+	build VADDY;
+	build VADDZ;
+	build VADDW;
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}
+
+
+VFTOIX: is vudest & VUFTX & VUFSX {
+	VUFTX = trunc(VUFSX);
+}
+
+VFTOIX: is vudest & vudestx=0 {}
+
+VFTOIY: is vudest & VUFTY & VUFSY {
+	VUFTY = trunc(VUFSY);
+}
+
+VFTOIY: is vudest & vudesty=0 {}
+
+VFTOIZ: is vudest & VUFTZ & VUFSZ {
+	VUFTZ = trunc(VUFSZ);
+}
+
+VFTOIZ: is vudest & vudestz=0 {}
+
+VFTOIW: is vudest & VUFTW & VUFSW {
+	VUFTW = trunc(VUFSW);
+}
+
+VFTOIW: is vudest & vudestw=0 {}
+
+VFTOI: is VFTOIX & VFTOIY & VFTOIZ & VFTOIW {
+	build VFTOIX;
+	build VFTOIY;
+	build VFTOIZ;
+	build VFTOIW;
+}
+
+VITOFX: is vudest & VUFTX & VUFSX {
+	VUFTX = int2float(VUFSX);
+}
+
+VITOFX: is vudest & vudestx=0 {}
+
+VITOFY: is vudest & VUFTY & VUFSY {
+	VUFTY = int2float(VUFSY);
+}
+
+VITOFY: is vudest & vudesty=0 {}
+
+VITOFZ: is vudest & VUFTZ & VUFSZ {
+	VUFTZ = int2float(VUFSZ);
+}
+
+VITOFZ: is vudest & vudestz=0 {}
+
+VITOFW: is vudest & VUFTW & VUFSW {
+	VUFTW = int2float(VUFSW);
+}
+
+VITOFW: is vudest & vudestw=0 {}
+
+VITOF: is VITOFX & VITOFY & VITOFZ & VITOFW {
+	build VITOFX;
+	build VITOFY;
+	build VITOFZ;
+	build VITOFW;
+}
+
+VLQX: is vudest & VUFTX & vuis {
+	addr:4 = zext(vuis) * 16;
+	VUFTX = *[vumem]:4 addr;
+}
+
+VLQX: is vudest & vudestx=0 {}
+
+VLQY: is vudest & VUFTY & vuis {
+	addr:4 = (zext(vuis) * 16) + 32;
+	VUFTY = *[vumem]:4 addr;
+}
+
+VLQY: is vudest & vudesty=0 {}
+
+VLQZ: is vudest & VUFTZ & vuis {
+	addr:4 = (zext(vuis) * 16) + 64;
+	VUFTZ = *[vumem]:4 addr;
+}
+
+VLQZ: is vudest & vudestz=0 {}
+
+VLQW: is vudest & VUFTW & vuis {
+	addr:4 = (zext(vuis) * 16) + 96;
+	VUFTW = *[vumem]:4 addr;
+}
+
+VLQW: is vudest & vudestw=0 {}
+
+VLQ: is VLQX & VLQY & VLQZ & VLQW {
+	build VLQX;
+	build VLQY;
+	build VLQZ;
+	build VLQW;
+}
+
+VMADDX: is vudest & VUOP0X & VUOP2X & VUFSX & VUACCX {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSX f* VUOP2X;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0X = VUACCX f+ tmp;
+	$(Zx) = VUOP0X f== 0;
+	$(Sx) = VUOP0X f< 0;
+	$(Ux) = nan(f- VUOP0X);
+	$(Ox) = nan(VUOP0X);
+}
+
+VMADDX: is vudest & vudestx=0 {
+	$(Zx) = 0;
+	$(Sx) = 0;
+	$(Ux) = 0;
+	$(Ox) = 0;
+}
+
+VMADDY: is vudest & VUOP0Y & VUOP2Y & VUFSY & VUACCY {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSY f* VUOP2Y;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0Y = VUACCY f+ tmp;
+	$(Zy) = VUOP0Y f== 0;
+	$(Sy) = VUOP0Y f< 0;
+	$(Uy) = nan(f- VUOP0Y);
+	$(Oy) = nan(VUOP0Y);
+}
+
+VMADDY: is vudest & vudesty=0 {
+	$(Zy) = 0;
+	$(Sy) = 0;
+	$(Uy) = 0;
+	$(Oy) = 0;
+}
+
+VMADDZ: is vudest & VUOP0Z & VUOP2Z & VUFSZ & VUACCZ {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSZ f* VUOP2Z;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0Z = VUACCZ f+ tmp;
+	$(Zz) = VUOP0Z f== 0;
+	$(Sz) = VUOP0Z f< 0;
+	$(Uz) = nan(f- VUOP0Z);
+	$(Oz) = nan(VUOP0Z);
+}
+
+VMADDZ: is vudest & vudestz=0 {
+	$(Zz) = 0;
+	$(Sz) = 0;
+	$(Uz) = 0;
+	$(Oz) = 0;
+}
+
+VMADDW: is vudest & VUOP0W & VUOP2W & VUFSW & VUACCW {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSW f* VUOP2W;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0W = VUACCW f+ tmp;
+	$(Zw) = VUOP0W f== 0;
+	$(Sw) = VUOP0W f< 0;
+	$(Uw) = nan(f- VUOP0W);
+	$(Ow) = nan(VUOP0W);
+}
+
+VMADDW: is vudest & vudestw=0 {
+	$(Zw) = 0;
+	$(Sw) = 0;
+	$(Uw) = 0;
+	$(Ow) = 0;
+}
+
+VMADD: is VMADDX & VMADDY & VMADDZ & VMADDW {
+	build VMADDX;
+	build VMADDY;
+	build VMADDZ;
+	build VMADDW;
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}
+
+VMAXX: is vudest & VUOP0X & VUOP2X & VUFSX {
+	if (VUFSX f> VUOP2X) goto <max>;
+	VUOP0X = VUOP2X;
+	goto <done>;
+	<max>
+	VUOP0X = VUFSX;
+	<done>
+}
+
+VMAXX: is vudest & vudestx=0 {}
+
+VMAXY: is vudest & VUOP0Y & VUOP2Y & VUFSY {
+	if (VUFSY f> VUOP2Y) goto <max>;
+	VUOP0Y = VUOP2Y;
+	goto <done>;
+	<max>
+	VUOP0Y = VUFSY;
+	<done>
+}
+
+VMAXY: is vudest & vudesty=0 {}
+
+VMAXZ: is vudest & VUOP0Z & VUOP2Z & VUFSZ {
+	if (VUFSZ f> VUOP2Z) goto <max>;
+	VUOP0Z = VUOP2Z;
+	goto <done>;
+	<max>
+	VUOP0Z = VUFSZ;
+	<done>
+}
+
+VMAXZ: is vudest & vudestz=0 {}
+
+VMAXW: is vudest & VUOP0W & VUOP2W & VUFSW {
+	if (VUFSW f> VUOP2W) goto <max>;
+	VUOP0W = VUOP2W;
+	goto <done>;
+	<max>
+	VUOP0W = VUFSW;
+	<done>
+}
+
+VMAXW: is vudest & vudestw=0 {}
+
+VMAX: is VMAXX & VMAXY & VMAXZ & VMAXW {
+	build VMAXX;
+	build VMAXY;
+	build VMAXZ;
+	build VMAXW;
+}
+
+VMFIRX: is vudest & VUFTX & vuis {
+	VUFTX = sext(vuis);
+}
+
+VMFIRX: is vudest & vudestx=0 {}
+
+VMFIRY: is vudest & VUFTY & vuis {
+	VUFTY = sext(vuis);
+}
+
+VMFIRY: is vudest & vudesty=0 {}
+
+VMFIRZ: is vudest & VUFTZ & vuis {
+	VUFTZ = sext(vuis);
+}
+
+VMFIRZ: is vudest & vudestz=0 {}
+
+VMFIRW: is vudest & VUFTW & vuis {
+	VUFTW = sext(vuis);
+}
+
+VMFIRW: is vudest & vudestw=0 {}
+
+VMFIR: is VMFIRX & VMFIRY & VMFIRZ & VMFIRW {
+	build VMFIRX;
+	build VMFIRY;
+	build VMFIRZ;
+	build VMFIRW;
+}
+
+VMINIX: is vudest & VUOP0X & VUOP2X & VUFSX {
+	if (VUFSX f< VUOP2X) goto <min>;
+	VUOP0X = VUOP2X;
+	goto <done>;
+	<min>
+	VUOP0X = VUFSX;
+	<done>
+}
+
+VMINIX: is vudest & vudestx=0 {}
+
+VMINIY: is vudest & VUOP0Y & VUOP2Y & VUFSY {
+	if (VUFSY f< VUOP2Y) goto <min>;
+	VUOP0Y = VUOP2Y;
+	goto <done>;
+	<min>
+	VUOP0Y = VUFSY;
+	<done>
+}
+
+VMINIY: is vudest & vudesty=0 {}
+
+VMINIZ: is vudest & VUOP0Z & VUOP2Z & VUFSZ {
+	if (VUFSZ f< VUOP2Z) goto <min>;
+	VUOP0Z = VUOP2Z;
+	goto <done>;
+	<min>
+	VUOP0Z = VUFSZ;
+	<done>
+}
+
+VMINIZ: is vudest & vudestz=0 {}
+
+VMINIW: is vudest & VUOP0W & VUOP2W & VUFSW {
+	if (VUFSW f< VUOP2W) goto <min>;
+	VUOP0W = VUOP2W;
+	goto <done>;
+	<min>
+	VUOP0W = VUFSW;
+	<done>
+}
+
+VMINIW: is vudest & vudestw=0 {}
+
+VMINI: is VMINIX & VMINIY & VMINIZ & VMINIW {
+	build VMINIX;
+	build VMINIY;
+	build VMINIZ;
+	build VMINIW;
+}
+
+VMOVEX: is vudest & VUFTX & VUFSX {
+	VUFTX = VUFSX;
+}
+
+VMOVEX: is vudest & vudestx=0 {}
+
+VMOVEY: is vudest & VUFTY & VUFSY {
+	VUFTY = VUFSY;
+}
+
+VMOVEY: is vudest & vudesty=0 {}
+
+VMOVEZ: is vudest & VUFTZ & VUFSZ {
+	VUFTZ = VUFSZ;
+}
+
+VMOVEZ: is vudest & vudestz=0 {}
+
+VMOVEW: is vudest & VUFTW & VUFSW {
+	VUFTW = VUFSW;
+}
+
+VMOVEW: is vudest & vudestw=0 {}
+
+VMOVE: is VMOVEX & VMOVEY & VMOVEZ & VMOVEW {
+	build VMOVEX;
+	build VMOVEY;
+	build VMOVEZ;
+	build VMOVEW;
+}
+
+VMR32X: is vudest & VUFTX & VUFSY {
+	VUFTX = VUFSY;
+}
+
+VMR32X: is vudest & vudestx=0 {}
+
+VMR32Y: is vudest & VUFTY & VUFSZ {
+	VUFTY = VUFSZ;
+}
+
+VMR32Y: is vudest & vudesty=0 {}
+
+VMR32Z: is vudest & VUFTZ & VUFSW {
+	VUFTZ = VUFSW;
+}
+
+VMR32Z: is vudest & vudestz=0 {}
+
+VMR32W: is vudest & VUFTW & VUFSX {
+	VUFTW = VUFSX;
+}
+
+VMR32W: is vudest & vudestw=0 {}
+
+VMR32: is VMR32X & VMR32Y & VMR32Z & VMR32W {
+	build VMR32X;
+	build VMR32Y;
+	build VMR32Z;
+	build VMR32W;
+}
+
+VMSUBX: is vudest & VUOP0X & VUOP2X & VUFSX & VUACCX {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSX f* VUOP2X;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0X = VUACCX f- tmp;
+	$(Zx) = VUOP0X f== 0;
+	$(Sx) = VUOP0X f< 0;
+	$(Ux) = nan(f- VUOP0X);
+	$(Ox) = nan(VUOP0X);
+}
+
+VMSUBX: is vudest & vudestx=0 {
+	$(Zx) = 0;
+	$(Sx) = 0;
+	$(Ux) = 0;
+	$(Ox) = 0;
+}
+
+VMSUBY: is vudest & VUOP0Y & VUOP2Y & VUFSY & VUACCY {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSY f* VUOP2Y;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0Y = VUACCY f- tmp;
+	$(Zy) = VUOP0Y f== 0;
+	$(Sy) = VUOP0Y f< 0;
+	$(Uy) = nan(f- VUOP0Y);
+	$(Oy) = nan(VUOP0Y);
+}
+
+VMSUBY: is vudest & vudesty=0 {
+	$(Zy) = 0;
+	$(Sy) = 0;
+	$(Uy) = 0;
+	$(Oy) = 0;
+}
+
+VMSUBZ: is vudest & VUOP0Z & VUOP2Z & VUFSZ & VUACCZ {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSZ f* VUOP2Z;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0Z = VUACCZ f- tmp;
+	$(Zz) = VUOP0Z f== 0;
+	$(Sz) = VUOP0Z f< 0;
+	$(Uz) = nan(f- VUOP0Z);
+	$(Oz) = nan(VUOP0Z);
+}
+
+VMSUBZ: is vudest & vudestz=0 {
+	$(Zz) = 0;
+	$(Sz) = 0;
+	$(Uz) = 0;
+	$(Oz) = 0;
+}
+
+VMSUBW: is vudest & VUOP0W & VUOP2W & VUFSW & VUACCW {
+	# multiplication results change the sticky flags
+	tmp:4 = VUFSW f* VUOP2W;
+	$(ZS) = $(ZS) || tmp f== 0;
+	$(SS) = $(SS) || tmp f< 0;
+	$(US) = $(US) || nan(f- tmp);
+	$(OS) = $(OS) || nan(tmp);
+	VUOP0W = VUACCW f- tmp;
+	$(Zw) = VUOP0W f== 0;
+	$(Sw) = VUOP0W f< 0;
+	$(Uw) = nan(f- VUOP0W);
+	$(Ow) = nan(VUOP0W);
+}
+
+VMSUBW: is vudest & vudestw=0 {
+	$(Zw) = 0;
+	$(Sw) = 0;
+	$(Uw) = 0;
+	$(Ow) = 0;
+}
+
+VMSUB: is VMSUBX & VMSUBY & VMSUBZ & VMSUBW {
+	build VMSUBX;
+	build VMSUBY;
+	build VMSUBZ;
+	build VMSUBW;
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}
+
+VMULX: is vudestx & VUOP0X & VUOP2X & VUFSX {
+	VUOP0X = VUFSX f* VUOP2X;
+	$(Zx) = VUOP0X f== 0;
+	$(Sx) = VUOP0X f< 0;
+	$(Ux) = nan(f- VUOP0X);
+	$(Ox) = nan(VUOP0X);
+}
+
+VMULX: is vudest & vudestx=0 {
+	$(Zx) = 0;
+	$(Sx) = 0;
+	$(Ux) = 0;
+	$(Ox) = 0;
+}
+
+VMULY: is vudestx & VUOP0Y & VUOP2Y & VUFSY {
+	VUOP0Y = VUFSY f* VUOP2Y;
+	$(Zy) = VUOP0Y f== 0;
+	$(Sy) = VUOP0Y f< 0;
+	$(Uy) = nan(f- VUOP0Y);
+	$(Oy) = nan(VUOP0Y);
+}
+
+VMULY: is vudest & vudesty=0 {
+	$(Zy) = 0;
+	$(Sy) = 0;
+	$(Uy) = 0;
+	$(Oy) = 0;
+}
+
+VMULZ: is vudestz & VUOP0Z & VUOP2Z & VUFSZ {
+	VUOP0Z = VUFSZ f* VUOP2Z;
+	$(Zz) = VUOP0Z f== 0;
+	$(Sz) = VUOP0Z f< 0;
+	$(Uz) = nan(f- VUOP0Z);
+	$(Oz) = nan(VUOP0Z);
+}
+
+VMULZ: is vudest & vudestz=0 {
+	$(Zz) = 0;
+	$(Sz) = 0;
+	$(Uz) = 0;
+	$(Oz) = 0;
+}
+
+VMULW: is vudestw & VUOP0W & VUOP2W & VUFSW {
+	VUOP0W = VUFSW f* VUOP2W;
+	$(Zw) = VUOP0W f== 0;
+	$(Sw) = VUOP0W f< 0;
+	$(Uw) = nan(f- VUOP0W);
+	$(Ow) = nan(VUOP0W);
+}
+
+VMULW: is vudest & vudestw=0 {
+	$(Zw) = 0;
+	$(Sw) = 0;
+	$(Uw) = 0;
+	$(Ow) = 0;
+}
+
+VMUL: is VMULX & VMULY & VMULZ & VMULW {
+	build VMULX;
+	build VMULY;
+	build VMULZ;
+	build VMULW;
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}
+
+VRGETX: is vudest & VUFTX {
+	VUFTX = VRAND();
+}
+
+VRGETX: is vudest & vudestx=0 {}
+
+VRGETY: is vudest & VUFTY {
+	VUFTY = VRAND();
+}
+
+VRGETY: is vudest & vudesty=0 {}
+
+VRGETZ: is vudest & VUFTZ {
+	VUFTZ = VRAND();
+}
+
+VRGETZ: is vudest & vudestz=0 {}
+
+VRGETW: is vudest & VUFTW {
+	VUFTW = VRAND();
+}
+
+VRGETW: is vudest & vudestw=0 {}
+
+VRGET: is VRGETX & VRGETY & VRGETZ & VRGETW {
+	build VRGETX;
+	build VRGETY;
+	build VRGETZ;
+	build VRGETW;
+}
+
+VSQX: is vudest & VUFSX & vuit {
+	addr:4 = zext(vuit) * 16;
+	*[vumem]:4 addr = VUFSX;
+}
+
+VSQX: is vudest & vudestx=0 {}
+
+VSQY: is vudest & VUFSY & vuit {
+	addr:4 = (zext(vuit) * 16) + 32;
+	*[vumem]:4 addr = VUFSY;
+}
+
+VSQY: is vudest & vudesty=0 {}
+
+VSQZ: is vudest & VUFSZ & vuit {
+	addr:4 = (zext(vuit) * 16) + 64;
+	*[vumem]:4 addr = VUFSZ;
+}
+
+VSQZ: is vudest & vudestz=0 {}
+
+VSQW: is vudest & VUFSW & vuit {
+	addr:4 = (zext(vuit) * 16) + 96;
+	*[vumem]:4 addr = VUFSW;
+}
+
+VSQW: is vudest & vudestw=0 {}
+
+VSQ: is VSQX & VSQY & VSQZ & VSQW {
+	build VSQX;
+	build VSQY;
+	build VSQZ;
+	build VSQW;
+}
+
+VSUBX: is vudestx & VUOP0X & VUOP2X & VUFSX {
+	VUOP0X = VUFSX f- VUOP2X;
+	$(Zx) = VUOP0X f== 0;
+	$(Sx) = VUOP0X f< 0;
+	$(Ux) = nan(f- VUOP0X);
+	$(Ox) = nan(VUOP0X);
+}
+
+VSUBX: is vudest & vudestx=0 {
+	$(Zx) = 0;
+	$(Sx) = 0;
+	$(Ux) = 0;
+	$(Ox) = 0;
+}
+
+VSUBY: is vudestx & VUOP0Y & VUOP2Y & VUFSY {
+	VUOP0Y = VUFSY f- VUOP2Y;
+	$(Zy) = VUOP0Y f== 0;
+	$(Sy) = VUOP0Y f< 0;
+	$(Uy) = nan(f- VUOP0Y);
+	$(Oy) = nan(VUOP0Y);
+}
+
+VSUBY: is vudest & vudesty=0 {
+	$(Zy) = 0;
+	$(Sy) = 0;
+	$(Uy) = 0;
+	$(Oy) = 0;
+}
+
+VSUBZ: is vudestz & VUOP0Z & VUOP2Z & VUFSZ {
+	VUOP0Z = VUFSZ f- VUOP2Z;
+	$(Zz) = VUOP0Z f== 0;
+	$(Sz) = VUOP0Z f< 0;
+	$(Uz) = nan(f- VUOP0Z);
+	$(Oz) = nan(VUOP0Z);
+}
+
+VSUBZ: is vudest & vudestz=0 {
+	$(Zz) = 0;
+	$(Sz) = 0;
+	$(Uz) = 0;
+	$(Oz) = 0;
+}
+
+VSUBW: is vudestw & VUOP0W & VUOP2W & VUFSW {
+	VUOP0W = VUFSW f- VUOP2W;
+	$(Zw) = VUOP0W f== 0;
+	$(Sw) = VUOP0W f< 0;
+	$(Uw) = nan(f- VUOP0W);
+	$(Ow) = nan(VUOP0W);
+}
+
+VSUBW: is vudest & vudestw=0 {
+	$(Zw) = 0;
+	$(Sw) = 0;
+	$(Uw) = 0;
+	$(Ow) = 0;
+}
+
+VSUB: is VSUBX & VSUBY & VSUBZ & VSUBW {
+	build VSUBX;
+	build VSUBY;
+	build VSUBZ;
+	build VSUBW;
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}

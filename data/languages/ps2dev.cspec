@@ -9,7 +9,7 @@
      <wchar_size value="2" />
      <short_size value="2" />
      <integer_size value="4" />
-     <long_size value="8" />
+     <long_size value="4" />
      <long_long_size value="8" />
      <float_size value="4" />
      <double_size value="8" />
@@ -152,66 +152,191 @@
         <register name="vf29"/>
         <register name="vf30"/>
         <register name="vf31"/>
-      </killedbycall>    
+      </killedbycall>
       <likelytrash>
         <register name="s8"/>
       </likelytrash>
     </prototype>
   </default_proto>
-  <callfixup name="dpadd">
-    <target name="dpadd"/>
-    <pcode>
-      <body><![CDATA[
-        v0 = a0 f+ a1;
-      ]]></body>
-    </pcode>
-  </callfixup>
-  <callfixup name="dpsub">
-    <target name="dpsub"/>
-    <pcode>
-      <body><![CDATA[
-        v0 = a0 f- a1;
-      ]]></body>
-    </pcode>
-  </callfixup>
-  <callfixup name="dpmul">
-    <target name="dpmul"/>
-    <pcode>
-      <body><![CDATA[
-        v0 = a0 f* a1;
-      ]]></body>
-    </pcode>
-  </callfixup>
-  <callfixup name="dpdiv">
-    <target name="dpdiv"/>
-    <pcode>
-      <body><![CDATA[
-        v0 = a0 f/ a1;
-      ]]></body>
-    </pcode>
-  </callfixup>
-  <callfixup name="inttodp">
-    <target name="litodp"/>
-    <pcode>
-      <body><![CDATA[
-        v0 = int2float(a0);
-      ]]></body>
-    </pcode>
-  </callfixup>
-  <callfixup name="dptofp">
-    <target name="dptofp"/>
-    <pcode>
-      <body><![CDATA[
-        f0 = float2float(a0);
-      ]]></body>
-    </pcode>
-  </callfixup>
-  <callfixup name="fptodp">
-    <target name="fptodp"/>
-    <pcode>
-      <body><![CDATA[
-        v0 = float2float(f12);
-      ]]></body>
-    </pcode>
-  </callfixup>
+  <callotherfixup targetop="VABS">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <output name="VUFT"/>
+        <input name="VUFS"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VADD">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VADDBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMADD">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMADDBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VSUB">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VSUBBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMSUB">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMSUBBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMUL">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMULBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VFTOI">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <output name="VUFT"/>
+        <input name="VUFS"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VITOF">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <output name="VUFT"/>
+        <input name="VUFS"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VULQ">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="addr"/>
+        <output name="VUFT"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VUSQ">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="addr"/>
+        <input name="VUFS"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMAX">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMAXBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMINI">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMINIBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <input name="VUFT"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMFIR">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUIS"/>
+        <output name="VUFT"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMOVE">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <output name="VUFT"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMOVEBC">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <output name="VUFT"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VMR32">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <input name="VUFS"/>
+        <output name="VUFT"/>
+      </pcode>
+  </callotherfixup>
+  <callotherfixup targetop="VCLEAR">
+      <pcode dynamic="true">
+        <input name="DEST"/>
+        <output name="VUFD"/>
+      </pcode>
+  </callotherfixup>
 </compiler_spec>

@@ -1,0 +1,505 @@
+
+:bc2f Rel16 is COP2 & Rel16 & vuop13=256 {
+    delayslot(1); # delay slot instruction always executed
+    sig:1 = getCop2ConditionSignal();
+	if (sig == 0) goto Rel16;
+}
+
+:bc2fl Rel16 is COP2 & Rel16 & vuop13=258 {
+	sig:1 = getCop2ConditionSignal();
+	if (sig != 0) goto inst_next;
+	# delay slot instruction executed only if conditional branch occurs
+	delayslot(1);
+	goto Rel16;
+}
+
+:bc2t Rel16 is COP2 & Rel16 & vuop13=257 {
+    delayslot(1); # delay slot instruction always executed
+	sig:1 = getCop2ConditionSignal();
+    if (sig != 0) goto Rel16;
+}
+
+:bc2tl Rel16 is COP2 & Rel16 & vuop13=259 {
+	sig:1 = getCop2ConditionSignal();
+	if (sig == 0) goto inst_next;
+	# delay slot instruction executed only if conditional branch occurs
+	delayslot(1);
+	goto Rel16;
+}
+
+:cfc2^INTERLOCK RT32, vuccid is COP2 & RT32 & vuccid & vuop11=2 & INTERLOCK {
+	build INTERLOCK;
+	RT32 = sext(vuccid);
+}
+
+:ctc2^INTERLOCK RT32src, vuccid is COP2 & RT32src & vuccid & vuop11=6 & INTERLOCK {
+	build INTERLOCK;
+	vuccid = RT32src;
+}
+
+:lqc2 vuft, OFF_BASE is vuop12=54 & OFF_BASE & vuft {
+    vuft[0,32] = *:4 OFF_BASE;
+	vuft[32,32] = *:4 (OFF_BASE+4);
+	vuft[64,32] = *:4 (OFF_BASE+8);
+	vuft[96,32] = *:4 (OFF_BASE+12);
+}
+
+:qmfc2^INTERLOCK RT128, vurd is COP2 & vuop11=1 & vu_1_10=0 & RT128 & vurd & INTERLOCK {
+	build INTERLOCK;
+	RT128[0,32] = vurd[0,32];
+	RT128[32,32] = vurd[32,32];
+	RT128[64,32] = vurd[64,32];
+	RT128[96,32] = vurd[96,32];
+}
+
+:qmtc2^INTERLOCK RT128, vurd is vuop11=5 & RT128 & vurd & vu_1_10=0 & INTERLOCK {
+	build INTERLOCK;
+	vurd[0,32] = RT128[0,32];
+	vurd[32,32] = RT128[32,32];
+	vurd[64,32] = RT128[64,32];
+	vurd[96,32] = RT128[96,32];
+}
+
+:sqc2 vuft, OFF_BASE is vuop12=62 & OFF_BASE & vuft & VUFTX & VUFTY & VUFTZ & VUFTW {
+    *:4 OFF_BASE = VUFTX;
+	*:4 (OFF_BASE+4) = VUFTY;
+	*:4 (OFF_BASE+8) = VUFTZ;
+	*:4 (OFF_BASE+12) = VUFTW;
+}
+
+:vabs^dest VUFT, VUFS is COP2 & vuco=1 & dest & VUFT & VUFS & vuop3=509 & VABSX & VABSY & VABSZ & VABSW {
+	build VABSX;
+	build VABSY;
+	build VABSZ;
+	build VABSW;
+}
+
+
+
+:vadd^dest VUFD, VUFS, VUFT is COP2 & vuco=1 & dest & VUFD & VUFS & VUFT & vuop1=40 & VADD {
+	build VADD;
+}
+
+:vaddi^dest VUFD, VUFS, I is COP2 & vuco=1 & dest & VUFD & VUFS & I & vuop1=34 & VADD [ iflag=1; ] {
+	build VADD;
+}
+
+:vaddq^dest VUFD, VUFS, Q is COP2 & vuco=1 & dest & VUFD & VUFS & Q & vuop1=32 & VADD [ qflag=1; ] {
+	build VADD;
+}
+
+:vadd^bc^dest VUFD, VUFS, VUFTBC is COP2 & vuco=1 & dest & VUFD & VUFS & vuop0=0 & bc & VADD & VUFTBC [ bcflag=1; ] {
+	build VADD;
+}
+
+:vadda^dest VUACC, VUFS, VUFT is COP2 & vuco=1 & dest & VUACC & VUFS & VUFT & vuop3=700 & VADD [ accflag=1; ] {
+	build VADD;
+}
+
+:vaddai^dest VUACC, VUFS, I is COP2 & vuco=1 & dest & VUACC & VUFS & I & vuop3=574 & VADD [ accflag=1; iflag=1; ] {
+	build VADD;
+}
+
+:vaddaq^dest VUACC, VUFS, Q is COP2 & vuco=1 & dest & VUACC & VUFS & Q & vuop3=572 & VADD [ accflag=1; qflag=1; ] {
+	build VADD;
+}
+
+:vadda^bc^dest VUACC, VUFS, VUFTBC is COP2 & vuco=1 & dest & VUACC & VUFS & VUFTBC & bc & vuop2=15 & VADD [ accflag=1; bcflag=1; ] {
+	build VADD;
+}
+
+:vcallms VU_IMM15 is VU_IMM15 & COP2 & vuco=1 & vudest=0 & vuop6=56 {
+	call VU_IMM15;
+}
+
+:vcallmsr CMSAR0 is COP2 & vuco=1 & vudest=0 & vuft=0 & vufs=27 & vufd=0 & vuop1=57 & CMSAR0 {
+	call [CMSAR0];
+}
+
+:vclipw.xyz vufs^"xyz", vuft^"w" is COP2 & vuco=1 & vudest=14 & vuft & vufs & vuop3=511 {
+	tmp:3 = CF << 6;
+	w:4 = abs(vuft[96,32]);
+	tmp[0,1] = vufs[0,32] f> w;
+	tmp[1,1] = vufs[0,32] f< f- w;
+	tmp[2,1] = vufs[32,32] f> w;
+	tmp[3,1] = vufs[32,32] f< f- w;
+	tmp[4,1] = vufs[64,32] f> w;
+	tmp[5,1] = vufs[64,32] f< f- w;
+	CF = tmp;
+}
+
+:vdiv Q, vufs^fsf, vuft^ftf is COP2 & vuco=1 & vufs & fsf & vuft & ftf & vuop4=956 & Q {
+	Q = fsf f/ ftf;
+	flag:1 = (fsf f== 0) && (ftf f== 0);
+	$(I) = flag;
+	$(IS) = $(IS) || flag;
+	flag = ftf f== 0;
+	$(D) = flag;
+	$(DS) = $(DS) || flag;
+}
+
+:vftoi0^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=380 & VFTOI {
+	build VFTOI;
+}
+
+:vftoi4^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=381 & VFTOI {
+	build VFTOI;
+}
+
+:vftoi12^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=382 & VFTOI {
+	build VFTOI;
+}
+
+:vftoi15^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=383 & VFTOI {
+	build VFTOI;
+}
+
+:viadd vuid, vuis, vuit is COP2 & vuco=1 & vudest=0 & vuit & vuis & vuid & vuop1=48 {
+	vuid = vuis + vuit;
+}
+
+:viaddi vuit, vuis, vuimm5 is COP2 & vuco=1 & vudest=0 & vuit & vuis & vuimm5 & vuop1=50 {
+	vuit = vuis + sext(vuimm5:1);
+}
+
+:viand vuid, vuis, vuit is COP2 & vuco=1 & vudest=0 & vuit & vuis & vuid & vuop1=52 {
+	vuid = vuis & vuit;
+}
+
+:vilwr^idest vuit, VUMEMDEST is COP2 & vuco=1 & VUMEMDEST & idest & vuit & vuop3=1022 {
+	vuit = *[vumem]:2 VUMEMDEST;
+}
+
+:vior vuid, vuis, vuit is COP2 & vuco=1 & vudest=0 & vuit & vuis & vuid & vuop1=53 {
+	vuid = vuis | vuit;
+}
+
+:visub vuid, vuis, vuit is COP2 & vuco=1 & vudest=0 & vuit & vuis & vuid & vuop1=49 {
+	vuid = vuis - vuit;
+}
+
+:viswr^idest vuit, VUMEMDEST is COP2 & vuco=1 & VUMEMDEST & idest & vuit & vuop3=1023 {
+	*[vumem]:4 VUMEMDEST = zext(vuit);
+}
+
+:vitof0^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=316 & VITOF {
+	build VITOF;
+}
+
+:vitof4^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=317 & VITOF {
+	build VITOF;
+}
+
+:vitof12^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=318 & VITOF {
+	build VITOF;
+}
+
+:vitof15^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=319 & VITOF {
+	build VITOF;
+}
+
+:vlqd^dest vuft, (--vuis) is COP2 & vuco=1 & dest & vuft & vuis & vuop3=894 & VLQ {
+	vuis = vuis - 1;
+	build VLQ;
+}
+
+:vlqi^dest vuft, (vuis++) is COP2 & vuco=1 & dest & vuft & vuis & vuop3=892 & VLQ {
+	build VLQ;
+	vuis = vuis + 1;
+}
+
+:vmadd^dest vufd, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop1=41 & VMADD {
+	build VMADD;
+}
+
+:vmaddi^dest vufd, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & vuop1=35 & I & VMADD [iflag=1;] {
+	build VMADD;
+}
+
+:vmaddq^dest vufd, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & vuop1=33 & VMADD [qflag=1;] {
+	build VMADD;
+}
+
+:vmadd^bc^dest vufd, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop0=2 & bc & VMADD & VUFTBC [bcflag=1;] {
+	build VMADD;
+}
+
+:vmadda^dest VUACC, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vuop3=701 & VUACC & VMADD [accflag=1;] {
+	build VMADD;
+}
+
+:vmaddai^dest VUACC, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=575 & I & VUACC & VMADD [accflag=1; iflag=1;] {
+	build VMADD;
+}
+
+:vmaddaq^dest VUACC, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=573 & VUACC & VMADD [accflag=1; qflag=1;] {
+	build VMADD;
+}
+
+:vmadda^bc^dest VUACC, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vuop2=47 & bc & VUACC & VMADD & VUFTBC [accflag=1; bcflag=1;] {
+	build VMADD;
+}
+
+:vmax^dest vufd, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop1=43 & VMAX {
+	build VMAX;
+}
+
+:vmaxi^dest vufd, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & vuop1=29 & I & VMAX [iflag=1;] {
+	build VMAX;
+}
+
+:vmax^bc^dest vufd, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop0=4 & bc & VMAX & VUFTBC [bcflag=1;] {
+	build VMAX;
+}
+
+:vmfir^dest vuft, vuis is COP2 & vuco=1 & dest & vuft & vuis & vuop3=1021 & VMFIR {
+	build VMFIR;
+}
+
+:vmini^dest vufd, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop1=47 & VMINI {
+	build VMINI;
+}
+
+:vminii^dest vufd, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & I & vuop1=31 & VMINI [iflag=1;] {
+	build VMINI;
+}
+
+:vmini^bc^dest vufd, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop0=5 & bc & VMINI & VUFTBC [bcflag=1;] {
+	build VMINI;
+}
+
+:vmove^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=828 & VMOVE {
+	build VMOVE;
+}
+
+:vmr32^dest vuft, vufs is COP2 & vuco=1 & dest & vuft & vufs & vuop3=829 & VMR32 {
+	build VMR32;
+}
+
+:vmsub^dest vufd, vufs, vuft is COP2 & vuco=1 & dest & vufd & vufs & vuft & vuop1=45 & VMSUB {
+	build VMSUB;
+}
+
+:vmsubi^dest vufd, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & I & vuop1=39 & VMSUB [iflag=1;] {
+	build VMSUB;
+}
+
+:vmsubq^dest vufd, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & vuop1=37 & VMSUB [qflag=1;] {
+	build VMSUB;
+}
+
+:vmsub^bc^dest vufd, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop0=3 & bc & VUFTBC & VMSUB [bcflag=1;] {
+	build VMSUB;
+}
+
+:vmsuba^dest VUACC, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vuop3=765 & VUACC & VMSUB [accflag=1;] {
+	build VMSUB;
+}
+
+:vmsubai^dest VUACC, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=639 & I & VUACC & VMSUB [accflag=1; iflag=1;] {
+	build VMSUB;
+}
+
+:vmsubaq^dest VUACC, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=637 & VUACC & VMSUB [accflag=1; qflag=1;] {
+	build VMSUB;
+}
+
+:vmsuba^bc^dest VUACC, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vuop2=63 & VUACC & bc & VUFTBC & VMSUB [accflag=1; bcflag=1;] {
+	build VMSUB;
+}
+
+:vmtir vuit, vufs^fsf is COP2 & vuco=1 & vuftf=0 & fsf & vuit & vufs & vuop3=1020 {
+    vuit = fsf[0,16];
+}
+
+:vmul^dest vufd, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop1=42 & VMUL {
+	build VMUL;
+}
+
+:vmuli^dest vufd, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & I & vuop1=30 & VMUL [iflag=1;] {
+	build VMUL;
+}
+
+:vmulq^dest vufd, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & vuop1=28 & VMUL [qflag=1;] {
+	build VMUL;
+}
+
+:vmul^bc^dest vufd, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop0=6 & bc & VMUL & VUFTBC [bcflag=1;] {
+	build VMUL;
+}
+
+:vmula^dest VUACC, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vuop3=702 & VUACC & VMUL [accflag=1;] {
+	build VMUL;
+}
+
+:vmulai^dest VUACC, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=510 & I & VUACC & VMUL [accflag=1; iflag=1;] {
+	build VMUL;
+}
+
+:vmulaq^dest VUACC, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=508 & VUACC & VMUL [accflag=1; qflag=1;] {
+	build VMUL;
+}
+
+:vmula^bc^dest VUACC, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vuop2=111 & VUACC & bc & VMUL & VUFTBC [accflag=1; bcflag=1;] {
+	build VMUL;
+}
+
+:vnop is COP2 & vuco=1 & vudest=0b0000 & vuft=0 & vufs=0 & vuop3=767 {
+}
+
+:vopmula."xyz" VUACC, vufs^"xyz", vuft^"xyz" is COP2 & vuco=1 & vudest=0b1110 & VUACC & VUFSX & VUFSY & VUFSZ & VUFTX & VUFTY & VUFTZ & vuft & vufs & vuop3=766 {
+	vuACCx = VUFSY f* VUFTZ;
+	vuACCy = VUFSZ f* VUFTX;
+	vuACCz = VUFSX f* VUFTY;
+	$(Zx) = vuACCx f== 0;
+	$(Sx) = vuACCx f< 0;
+	$(Ux) = nan(f- vuACCx);
+	$(Ox) = nan(vuACCx);
+	$(Zy) = vuACCy f== 0;
+	$(Sy) = vuACCy f< 0;
+	$(Uy) = nan(f- vuACCy);
+	$(Oy) = nan(vuACCy);
+	$(Zz) = vuACCz f== 0;
+	$(Sz) = vuACCz f< 0;
+	$(Uz) = nan(f- vuACCz);
+	$(Oz) = nan(vuACCz);
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}
+
+:vopmsub."xyz" vufd^"xyz", vufs^"xyz", vuft^"xyz" is COP2 & vuco=1 & vudest=0b1110 & VUFDX & VUFDY & VUFDZ & VUFSX & VUFSY & VUFSZ & VUFTX & VUFTY & VUFTZ & vuft & vufs & vufd & vuop1=46 {
+	tmpx:4 = VUFSY f* VUFTZ;
+	$(ZS) = $(ZS) || tmpx f== 0;
+	$(SS) = $(SS) || tmpx f< 0;
+	$(US) = $(US) || nan(f- tmpx);
+	$(OS) = $(OS) || nan(tmpx);
+	tmpy:4 = VUFSZ f* VUFTX;
+	$(ZS) = $(ZS) || tmpy f== 0;
+	$(SS) = $(SS) || tmpy f< 0;
+	$(US) = $(US) || nan(f- tmpy);
+	$(OS) = $(OS) || nan(tmpy);
+	tmpz:4 = VUFSX f* VUFTY;
+	$(ZS) = $(ZS) || tmpz f== 0;
+	$(SS) = $(SS) || tmpz f< 0;
+	$(US) = $(US) || nan(f- tmpz);
+	$(OS) = $(OS) || nan(tmpz);
+	VUFDX = vuACCx f- tmpx;
+	VUFDY = vuACCy f- tmpy;
+	VUFDZ = vuACCz f- tmpz;
+	$(Zx) = VUFDX f== 0;
+	$(Sx) = VUFDX f< 0;
+	$(Ux) = nan(f- VUFDX);
+	$(Ox) = nan(VUFDX);
+	$(Zy) = VUFDY f== 0;
+	$(Sy) = VUFDY f< 0;
+	$(Uy) = nan(f- VUFDY);
+	$(Oy) = nan(VUFDY);
+	$(Zz) = VUFDZ f== 0;
+	$(Sz) = VUFDZ f< 0;
+	$(Uz) = nan(f- VUFDZ);
+	$(Oz) = nan(VUFDZ);
+	flag:1 = $(MACZ) != 0;
+	$(Z) = flag;
+	$(ZS) = $(ZS) || flag;
+	flag = $(MACS) != 0;
+	$(S) = flag;
+	$(SS) = $(SS) || flag;
+	flag = $(MACO) != 0;
+	$(O) = flag;
+	$(OS) = $(OS) || flag;
+	flag = $(MACU) != 0;
+	$(U) = flag;
+	$(US) = $(US) || flag;
+}
+
+:vrget^dest vuft, "R" is COP2 & vuco=1 & dest & vuft & vufs=0 & vuop3=1085 & VRGET {
+	build VRGET;
+}
+
+:vrinit "R", vufs^fsf is COP2 & vuco=1 & vuftf=0 & fsf & vuft=0 & vufs & vuop3=1086 {
+    VRINIT(fsf);
+}
+
+:vrnext^dest vuft, "R" is COP2 & vuco=1 & dest & vuft & vufs=0 & vuop3=1084 & VRGET {
+	# I don't see a difference between vrget and vrnext so I'm re-using VRGET
+	build VRGET;
+}
+
+:vrsqrt Q, vufs^fsf, vuft^ftf is Q & COP2 & vuco=1 & ftf & fsf & vuft & vufs & vuop3=958 {
+	flag:1 = (ftf f< 0);
+	$(I) = flag;
+	$(IS) = $(IS) || flag;
+	flag = ((ftf f== 0) && (fsf f!= 0));
+	$(D) = flag;
+	$(DS) = $(DS) || flag;
+    Q = fsf f/ sqrt(ftf);
+}
+
+:vrxor "R", vufs^fsf is COP2 & vuco=1 & vuftf=0 & fsf & vuft=0 & vufs & vuop3=1087 {
+	VRXOR(fsf);
+}
+
+:vsqd^dest vufs,  (--vuit) is COP2 & vuco=1 & dest & vuit & vufs & vuop3=895 & VSQ {
+	vuit = vuit - 1;
+	build VSQ;
+}
+
+:vsqi^dest vufs,  (vuit++) is COP2 & vuco=1 & dest & vuit & vufs & vuop3=893 & VSQ {
+	build VSQ;
+	vuit = vuit + 1;
+}
+
+:vsqrt Q, vuft^ftf is Q & COP2 & vuco=1 & ftf & vuft & vufs=0 & vuop3=957 {
+	flag:1 = (ftf f< 0);
+	$(I) = flag;
+	$(IS) = $(IS) || flag;
+	$(D) = 0;
+	# DS has no change
+    Q = sqrt(ftf);
+}
+
+:vsub^dest vufd, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop1=44 & VSUB {
+	build VSUB;
+}
+
+:vsubi^dest vufd, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & I & vuop1=38 & VSUB [iflag=1;] {
+	build VSUB;
+}
+
+:vsubq^dest vufd, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vufd & vuop1=36 & VSUB [qflag=1;] {
+	build VSUB;
+}
+
+:vsub^bc^dest vufd, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vufd & vuop0=1 & bc & VSUB & VUFTBC [bcflag=1;] {
+	build VSUB;
+}
+
+:vsuba^dest VUACC, vufs, vuft is COP2 & vuco=1 & dest & vuft & vufs & vuop3=764 & VUACC & VSUB [accflag=1;] {
+	build VSUB;
+}
+
+:vsubai^dest VUACC, vufs, I is COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=638 & I & VUACC & VSUB [accflag=1; iflag=1;] {
+	build VSUB;
+}
+
+:vsubaq^dest VUACC, vufs, Q is Q & COP2 & vuco=1 & dest & vuft=0 & vufs & vuop3=636 & VUACC & VSUB [accflag=1; qflag=1;] {
+	build VSUB;
+}
+
+:vsuba^bc^dest VUACC, vufs, VUFTBC is COP2 & vuco=1 & dest & vuft & vufs & vuop2=31 & VUACC & bc & VSUB & VUFTBC [accflag=1; bcflag=1;] {
+	build VSUB;
+}
+
+:vwaitq is COP2 & vuco=1 & vudest=0 & vuft=0 & vufs=0 & vuop3=959 {
+	WAIT(Q);
+}

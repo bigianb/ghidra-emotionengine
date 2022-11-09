@@ -1,0 +1,942 @@
+<modules>
+	<module name="dev9">
+		<entry name="dev9RegisterIntrCb" ordinal="4"/>
+		<entry name="dev9DmaTransfer" ordinal="5"/>
+		<entry name="dev9Shutdown" ordinal="6"/>
+		<entry name="dev9IntrEnable" ordinal="7"/>
+		<entry name="dev9IntrDisable" ordinal="8"/>
+		<entry name="dev9GetEEPROM" ordinal="9"/>
+		<entry name="dev9LEDCtl" ordinal="10"/>
+		<entry name="dev9RegisterShutdownCb" ordinal="11"/>
+		<entry name="dev9RegisterPreDmaCb" ordinal="12"/>
+		<entry name="dev9RegisterPostDmaCb" ordinal="13"/>
+	</module>
+	<module name="atad">
+		<entry name="ata_get_devinfo" ordinal="4"/>
+		<entry name="ata_reset_devices" ordinal="5"/>
+		<entry name="ata_io_start" ordinal="6"/>
+		<entry name="ata_io_finish" ordinal="7"/>
+		<entry name="ata_get_error" ordinal="8"/>
+		<entry name="ata_device_sector_io" ordinal="9"/>
+		<entry name="ata_device_sce_sec_set_password" ordinal="10"/>
+		<entry name="ata_device_sce_sec_unlock" ordinal="11"/>
+		<entry name="ata_device_sce_sec_erase" ordinal="12"/>
+		<entry name="ata_device_idle" ordinal="13"/>
+		<entry name="ata_device_sce_identify_drive" ordinal="14"/>
+		<entry name="ata_device_smart_get_status" ordinal="15"/>
+		<entry name="ata_device_smart_save_attr" ordinal="16"/>
+		<entry name="ata_device_flush_cache" ordinal="17"/>
+		<entry name="ata_device_idle_immediate" ordinal="18"/>
+	</module>
+	<module name="poweroff">
+		<entry name="SetPowerButtonHandler" ordinal="4"/>
+		<entry name="AddPowerOffHandler" ordinal="5"/>
+		<entry name="RemovePowerOffHandler" ordinal="6"/>
+		<entry name="PoweroffShutdown" ordinal="7"/>
+	</module>
+	<module name="usbd">
+		<entry name="sceUsbdRegisterLdd" ordinal="4"/>
+		<entry name="sceUsbdUnregisterLdd" ordinal="5"/>
+		<entry name="sceUsbdScanStaticDescriptor" ordinal="6"/>
+		<entry name="sceUsbdSetPrivateData" ordinal="7"/>
+		<entry name="sceUsbdGetPrivateData" ordinal="8"/>
+		<entry name="sceUsbdOpenPipe" ordinal="9"/>
+		<entry name="sceUsbdClosePipe" ordinal="10"/>
+		<entry name="sceUsbdTransferPipe" ordinal="11"/>
+		<entry name="sceUsbdOpenPipeAligned" ordinal="12"/>
+		<entry name="sceUsbdGetDeviceLocation" ordinal="13"/>
+		<entry name="sceUsbRegisterAutoloader" ordinal="14"/>
+		<entry name="sceUsbUnregisterAutoloader" ordinal="15"/>
+		<entry name="sceUsbdChangeThreadPriority" ordinal="16"/>
+		<entry name="sceUsbdGetReportDescriptor" ordinal="17"/>
+		<entry name="sceUsbdMultiIsochronousTransfer" ordinal="18"/>
+	</module>
+	<module name="usbmass">
+		<entry name="UsbMassGetDeviceInfo" ordinal="4"/>
+		<entry name="UsbMassRegisterCallback" ordinal="5"/>
+		<entry name="UsbMassFatGetData" ordinal="6"/>
+		<entry name="UsbMassReadSector" ordinal="7"/>
+		<entry name="UsbMassWriteSector" ordinal="8"/>
+		<entry name="UsbMassFlushCache" ordinal="9"/>
+		<entry name="UsbMassFatGetClusterChain" ordinal="10"/>
+	</module>
+	<module name="rsio2man">
+		<entry name="sio2_transfer_reset" ordinal="26"/>
+		<entry name="sio2_mtap_transfer_init" ordinal="48"/>
+		<entry name="sio2_rm_transfer_init" ordinal="49"/>
+		<entry name="sio2_unk_transfer_init" ordinal="50"/>
+		<entry name="sio2_transfer2" ordinal="51"/>
+		<entry name="sio2_transfer_reset2" ordinal="52"/>
+		<entry name="sio2_mtap_change_slot_set" ordinal="53"/>
+		<entry name="sio2_mtap_get_slot_max_set" ordinal="54"/>
+		<entry name="sio2_mtap_get_slot_max2_set" ordinal="55"/>
+		<entry name="sio2_mtap_update_slots_set" ordinal="56"/>
+		<entry name="sio2_mtap_change_slot" ordinal="57"/>
+		<entry name="sio2_mtap_get_slot_max" ordinal="58"/>
+		<entry name="sio2_mtap_get_slot_max2" ordinal="59"/>
+		<entry name="sio2_mtap_update_slots" ordinal="60"/>
+	</module>
+	<module name="sio2man">
+		<entry name="sio2_ctrl_set" ordinal="4"/>
+		<entry name="sio2_ctrl_get" ordinal="5"/>
+		<entry name="sio2_stat6c_get" ordinal="6"/>
+		<entry name="sio2_portN_ctrl1_set" ordinal="7"/>
+		<entry name="sio2_portN_ctrl1_get" ordinal="8"/>
+		<entry name="sio2_portN_ctrl2_set" ordinal="9"/>
+		<entry name="sio2_portN_ctrl2_get" ordinal="10"/>
+		<entry name="sio2_stat70_get" ordinal="11"/>
+		<entry name="sio2_regN_set" ordinal="12"/>
+		<entry name="sio2_regN_get" ordinal="13"/>
+		<entry name="sio2_stat74_get" ordinal="14"/>
+		<entry name="sio2_unkn78_set" ordinal="15"/>
+		<entry name="sio2_unkn78_get" ordinal="16"/>
+		<entry name="sio2_unkn7c_set" ordinal="17"/>
+		<entry name="sio2_unkn7c_get" ordinal="18"/>
+		<entry name="sio2_data_out" ordinal="19"/>
+		<entry name="sio2_data_in" ordinal="20"/>
+		<entry name="sio2_stat_set" ordinal="21"/>
+		<entry name="sio2_stat_get" ordinal="22"/>
+		<entry name="sio2_pad_transfer_init" ordinal="23"/>
+		<entry name="sio2_mc_transfer_init" ordinal="24"/>
+		<entry name="sio2_transfer" ordinal="25"/>
+	</module>
+	<module name="iopmgr">
+		<entry name="smod_get_next_mod" ordinal="4"/>
+		<entry name="smod_get_mod_by_name" ordinal="5"/>
+		<entry name="smod_get_modcount_by_name" ordinal="6"/>
+		<entry name="smod_get_modversion_by_name" ordinal="7"/>
+		<entry name="smod_unload_module" ordinal="8"/>
+		<entry name="slib_get_lib_by_name" ordinal="10"/>
+		<entry name="slib_get_exportlist_by_name" ordinal="11"/>
+		<entry name="slib_get_version_by_name" ordinal="12"/>
+		<entry name="slib_release_library" ordinal="13"/>
+		<entry name="iopmgr_get_iomandev" ordinal="15"/>
+		<entry name="iopmgr_get_iomanxdev" ordinal="16"/>
+		<entry name="iopmgr_get_device" ordinal="17"/>
+		<entry name="iopmgr_get_devicetype" ordinal="18"/>
+		<entry name="iopmgr_get_devicelist" ordinal="19"/>
+	</module>
+	<module name="rmman">
+		<entry name="rmmanInit" ordinal="4"/>
+		<entry name="rmmanOpen" ordinal="5"/>
+		<entry name="rmmanClose" ordinal="6"/>
+		<entry name="rmmanEnd" ordinal="7"/>
+	</module>
+	<module name="alloc">
+		<entry name="malloc" ordinal="4"/>
+		<entry name="realloc" ordinal="5"/>
+		<entry name="free" ordinal="6"/>
+		<entry name="calloc" ordinal="7"/>
+		<entry name="memalign" ordinal="8"/>
+		<entry name="__mem_walk_begin" ordinal="9"/>
+		<entry name="__mem_walk_read" ordinal="10"/>
+		<entry name="__mem_walk_inc" ordinal="11"/>
+		<entry name="__mem_walk_end" ordinal="12"/>
+	</module>
+	<module name="siftoo">
+		<entry name="sif2_init" ordinal="4"/>
+		<entry name="sif2_exit" ordinal="5"/>
+		<entry name="sif2_mem_read" ordinal="6"/>
+		<entry name="sif2_mem_write" ordinal="7"/>
+		<entry name="sif2_pipe_create" ordinal="10"/>
+		<entry name="sif2_pipe_open" ordinal="11"/>
+		<entry name="sif2_pipe_close" ordinal="12"/>
+		<entry name="sif2_pipe_read" ordinal="13"/>
+		<entry name="sif2_pipe_write" ordinal="14"/>
+	</module>
+	<module name="sbusintr">
+		<entry name="sbus_intr_init" ordinal="4"/>
+		<entry name="sbus_intr_exit" ordinal="2"/>
+		<entry name="sbus_intr_handler_add" ordinal="5"/>
+		<entry name="sbus_intr_handler_del" ordinal="6"/>
+		<entry name="sbus_intr_main_interrupt" ordinal="7"/>
+	</module>
+	<module name="mcman">
+		<entry name="McDetectCard" ordinal="5"/>
+		<entry name="McOpen" ordinal="6"/>
+		<entry name="McClose" ordinal="7"/>
+		<entry name="McRead" ordinal="8"/>
+		<entry name="McSeek" ordinal="10"/>
+		<entry name="McFormat" ordinal="11"/>
+		<entry name="McGetDir" ordinal="12"/>
+		<entry name="McDelete" ordinal="13"/>
+		<entry name="McFlush" ordinal="14"/>
+		<entry name="McSetFileInfo" ordinal="16"/>
+		<entry name="McEraseBlock2" ordinal="17"/>
+		<entry name="McReadPage" ordinal="18"/>
+		<entry name="McWritePage" ordinal="19"/>
+		<entry name="McDataChecksum" ordinal="20"/>
+		<entry name="McReadPS1PDACard" ordinal="29"/>
+		<entry name="McWritePS1PDACard" ordinal="30"/>
+		<entry name="McUnformat" ordinal="36"/>
+		<entry name="McRetOnly" ordinal="37"/>
+		<entry name="McGetFreeClusters" ordinal="38"/>
+		<entry name="McGetMcType" ordinal="39"/>
+		<entry name="McSetPS1CardFlag" ordinal="40"/>
+		<entry name="McDetectCard2" ordinal="21"/>
+		<entry name="McGetFormat" ordinal="22"/>
+		<entry name="McGetEntSpace" ordinal="23"/>
+		<entry name="McReplaceBadBlock" ordinal="24"/>
+		<entry name="McCloseAll" ordinal="25"/>
+		<entry name="McGetModuleInfo" ordinal="42"/>
+		<entry name="McGetCardSpec" ordinal="43"/>
+		<entry name="McGetFATentry" ordinal="44"/>
+		<entry name="McCheckBlock" ordinal="45"/>
+		<entry name="McSetFATentry" ordinal="46"/>
+		<entry name="McReadDirEntry" ordinal="47"/>
+		<entry name="Mc1stCacheEntSetWrFlagOff" ordinal="48"/>
+		<entry name="McCreateDirentry" ordinal="49"/>
+		<entry name="McReadCluster" ordinal="50"/>
+		<entry name="McFlushCache" ordinal="51"/>
+		<entry name="McSetDirEntryState" ordinal="52"/>
+	</module>
+	<module name="iLinkman">
+		<entry name="iLinkEnableSBus" ordinal="4"/>
+		<entry name="iLinkDisableSBus" ordinal="5"/>
+		<entry name="iLinkResetSBus" ordinal="6"/>
+		<entry name="iLinkSetNodeCapabilities" ordinal="7"/>
+		<entry name="iLinkSetTrCallbackHandler" ordinal="8"/>
+		<entry name="iLinkGetGenerationNumber" ordinal="9"/>
+		<entry name="iLinkGetLocalNodeID" ordinal="10"/>
+		<entry name="iLinkGetNodeCount" ordinal="11"/>
+		<entry name="iLinkGetLocalNodeEUI64" ordinal="12"/>
+		<entry name="iLinkTrFree" ordinal="13"/>
+		<entry name="iLinkTrWrite" ordinal="14"/>
+		<entry name="iLinkTrRead" ordinal="15"/>
+		<entry name="iLinkCalculateCRC16" ordinal="16"/>
+		<entry name="iLinkAddCROMUnit" ordinal="17"/>
+		<entry name="iLinkDeleteCROMUnit" ordinal="18"/>
+		<entry name="iLinkGetNodeCapabilities" ordinal="19"/>
+		<entry name="iLinkGetNodeMaxSpeed" ordinal="20"/>
+		<entry name="iLinkGetNodeTrSpeed" ordinal="21"/>
+		<entry name="iLinkSetNodeTrSpeed" ordinal="22"/>
+		<entry name="iLinkFindUnit" ordinal="23"/>
+		<entry name="iLinkReadCROM" ordinal="24"/>
+	</module>
+	<module name="devfs">
+		<entry name="DevFSAddDevice" ordinal="4"/>
+		<entry name="DevFSDelDevice" ordinal="5"/>
+		<entry name="DevFSAddSubDevice" ordinal="6"/>
+		<entry name="DevFSDelSubDevice" ordinal="7"/>
+	</module>
+	<module name="bdm">
+		<entry name="bdm_connect_bd" ordinal="4"/>
+		<entry name="bdm_disconnect_bd" ordinal="5"/>
+		<entry name="bdm_connect_fs" ordinal="6"/>
+		<entry name="bdm_disconnect_fs" ordinal="7"/>
+		<entry name="bdm_get_bd" ordinal="8"/>
+		<entry name="bdm_RegisterCallback" ordinal="9"/>
+	</module>
+	<module name="audsrv">
+		<entry name="audsrv_stop_audio" ordinal="10"/>
+		<entry name="audsrv_set_volume" ordinal="11"/>
+		<entry name="audsrv_play_cd" ordinal="12"/>
+		<entry name="audsrv_stop_cd" ordinal="13"/>
+		<entry name="audsrv_set_threshold" ordinal="14"/>
+		<entry name="audsrv_get_cdpos" ordinal="15"/>
+		<entry name="audsrv_get_trackpos" ordinal="16"/>
+		<entry name="audsrv_get_numtracks" ordinal="17"/>
+		<entry name="audsrv_get_track_offset" ordinal="18"/>
+		<entry name="audsrv_cd_pause" ordinal="19"/>
+		<entry name="audsrv_cd_resume" ordinal="20"/>
+		<entry name="audsrv_cd_play_sectors" ordinal="21"/>
+		<entry name="audsrv_get_cd_status" ordinal="22"/>
+		<entry name="audsrv_get_cd_type" ordinal="23"/>
+		<entry name="audsrv_adpcm_init" ordinal="24"/>
+		<entry name="audsrv_load_adpcm" ordinal="25"/>
+		<entry name="audsrv_play_adpcm" ordinal="26"/>
+	</module>
+	<module name="ps2ip">
+		<entry name="lwip_accept" ordinal="4"/>
+		<entry name="lwip_bind" ordinal="5"/>
+		<entry name="lwip_close" ordinal="6"/>
+		<entry name="lwip_connect" ordinal="7"/>
+		<entry name="lwip_listen" ordinal="8"/>
+		<entry name="lwip_recv" ordinal="9"/>
+		<entry name="lwip_recvfrom" ordinal="10"/>
+		<entry name="lwip_send" ordinal="11"/>
+		<entry name="lwip_sendto" ordinal="12"/>
+		<entry name="lwip_socket" ordinal="13"/>
+		<entry name="lwip_select" ordinal="14"/>
+		<entry name="lwip_ioctl" ordinal="15"/>
+		<entry name="lwip_getpeername" ordinal="16"/>
+		<entry name="lwip_getsockname" ordinal="17"/>
+		<entry name="lwip_getsockopt" ordinal="18"/>
+		<entry name="lwip_setsockopt" ordinal="19"/>
+		<entry name="ps2ip_setconfig" ordinal="20"/>
+		<entry name="ps2ip_getconfig" ordinal="21"/>
+		<entry name="ps2ip_input" ordinal="22"/>
+		<entry name="lwip_shutdown" ordinal="46"/>
+		<entry name="lwip_fcntl" ordinal="47"/>
+		<entry name="etharp_output" ordinal="23"/>
+		<entry name="tcpip_input" ordinal="25"/>
+		<entry name="tcpip_callback_with_block" ordinal="56"/>
+		<entry name="netif_add" ordinal="26"/>
+		<entry name="netif_find" ordinal="27"/>
+		<entry name="netif_set_default" ordinal="28"/>
+		<entry name="netif_set_ipaddr" ordinal="29"/>
+		<entry name="netif_set_netmask" ordinal="30"/>
+		<entry name="netif_set_gw" ordinal="31"/>
+		<entry name="netif_set_up" ordinal="32"/>
+		<entry name="netif_set_down" ordinal="33"/>
+		<entry name="netif_set_link_up" ordinal="54"/>
+		<entry name="netif_set_link_down" ordinal="55"/>
+		<entry name="pbuf_alloc" ordinal="34"/>
+		<entry name="pbuf_realloc" ordinal="35"/>
+		<entry name="pbuf_header" ordinal="36"/>
+		<entry name="pbuf_ref" ordinal="37"/>
+		<entry name="pbuf_free" ordinal="38"/>
+		<entry name="pbuf_clen" ordinal="39"/>
+		<entry name="pbuf_chain" ordinal="40"/>
+		<entry name="pbuf_dechain" ordinal="41"/>
+		<entry name="pbuf_take" ordinal="42"/>
+		<entry name="pbuf_coalesce" ordinal="57"/>
+		<entry name="ipaddr_addr" ordinal="24"/>
+		<entry name="ip4addr_aton" ordinal="43"/>
+		<entry name="ip4addr_ntoa" ordinal="44"/>
+		<entry name="ip4addr_ntoa_r" ordinal="45"/>
+		<entry name="lwip_gethostbyname" ordinal="48"/>
+		<entry name="lwip_gethostbyname_r" ordinal="49"/>
+		<entry name="lwip_freeaddrinfo" ordinal="50"/>
+		<entry name="lwip_getaddrinfo" ordinal="51"/>
+		<entry name="dns_setserver" ordinal="52"/>
+		<entry name="dns_getserver" ordinal="53"/>
+	</module>
+	<module name="heaplib">
+		<entry name="CreateHeap" ordinal="4"/>
+		<entry name="DeleteHeap" ordinal="5"/>
+		<entry name="AllocHeapMemory" ordinal="6"/>
+		<entry name="FreeHeapMemory" ordinal="7"/>
+		<entry name="HeapTotalFreeSize" ordinal="8"/>
+	</module>
+	<module name="sysclib">
+		<entry name="setjmp" ordinal="4"/>
+		<entry name="longjmp" ordinal="5"/>
+		<entry name="_toupper" ordinal="6"/>
+		<entry name="_tolower" ordinal="7"/>
+		<entry name="look_ctype_table" ordinal="8"/>
+		<entry name="get_ctype_table" ordinal="9"/>
+		<entry name="memchr" ordinal="10"/>
+		<entry name="memcmp" ordinal="11"/>
+		<entry name="memcpy" ordinal="12"/>
+		<entry name="memmove" ordinal="13"/>
+		<entry name="memset" ordinal="14"/>
+		<entry name="bcmp" ordinal="15"/>
+		<entry name="bcopy" ordinal="16"/>
+		<entry name="bzero" ordinal="17"/>
+		<entry name="prnt" ordinal="18"/>
+		<entry name="sprintf" ordinal="19"/>
+		<entry name="strcat" ordinal="20"/>
+		<entry name="strchr" ordinal="21"/>
+		<entry name="strcmp" ordinal="22"/>
+		<entry name="strcpy" ordinal="23"/>
+		<entry name="strcspn" ordinal="24"/>
+		<entry name="index" ordinal="25"/>
+		<entry name="rindex" ordinal="26"/>
+		<entry name="strlen" ordinal="27"/>
+		<entry name="strncat" ordinal="28"/>
+		<entry name="strncmp" ordinal="29"/>
+		<entry name="strncpy" ordinal="30"/>
+		<entry name="strpbrk" ordinal="31"/>
+		<entry name="strrchr" ordinal="32"/>
+		<entry name="strspn" ordinal="33"/>
+		<entry name="strstr" ordinal="34"/>
+		<entry name="strtok" ordinal="35"/>
+		<entry name="strtol" ordinal="36"/>
+		<entry name="atob" ordinal="37"/>
+		<entry name="strtoul" ordinal="38"/>
+		<entry name="wmemcopy" ordinal="40"/>
+		<entry name="wmemset" ordinal="41"/>
+		<entry name="vsprintf" ordinal="42"/>
+		<entry name="strtok_r" ordinal="43"/>
+	</module>
+	<module name="sysmem">
+		<entry name="AllocSysMemory" ordinal="4"/>
+		<entry name="FreeSysMemory" ordinal="5"/>
+		<entry name="QueryMemSize" ordinal="6"/>
+		<entry name="QueryMaxFreeMemSize" ordinal="7"/>
+		<entry name="QueryTotalFreeMemSize" ordinal="8"/>
+		<entry name="QueryBlockTopAddress" ordinal="9"/>
+		<entry name="QueryBlockSize" ordinal="10"/>
+		<entry name="Kprintf" ordinal="14"/>
+		<entry name="KprintfSet" ordinal="15"/>
+	</module>
+	<module name="timrman">
+		<entry name="AllocHardTimer" ordinal="4"/>
+		<entry name="ReferHardTimer" ordinal="5"/>
+		<entry name="FreeHardTimer" ordinal="6"/>
+		<entry name="SetTimerMode" ordinal="7"/>
+		<entry name="GetTimerStatus" ordinal="8"/>
+		<entry name="SetTimerCounter" ordinal="9"/>
+		<entry name="GetTimerCounter" ordinal="10"/>
+		<entry name="SetTimerCompare" ordinal="11"/>
+		<entry name="GetTimerCompare" ordinal="12"/>
+		<entry name="SetHoldMode" ordinal="13"/>
+		<entry name="GetHoldMode" ordinal="14"/>
+		<entry name="GetHoldReg" ordinal="15"/>
+		<entry name="GetHardTimerIntrCode" ordinal="16"/>
+	</module>
+	<module name="cdvdman">
+		<entry name="sceCdInit" ordinal="4"/>
+		<entry name="sceCdStandby" ordinal="5"/>
+		<entry name="sceCdRead" ordinal="6"/>
+		<entry name="sceCdSeek" ordinal="7"/>
+		<entry name="sceCdGetError" ordinal="8"/>
+		<entry name="sceCdGetToc" ordinal="9"/>
+		<entry name="sceCdSearchFile" ordinal="10"/>
+		<entry name="sceCdSync" ordinal="11"/>
+		<entry name="sceCdGetDiskType" ordinal="12"/>
+		<entry name="sceCdDiskReady" ordinal="13"/>
+		<entry name="sceCdTrayReq" ordinal="14"/>
+		<entry name="sceCdStop" ordinal="15"/>
+		<entry name="sceCdPosToInt" ordinal="16"/>
+		<entry name="sceCdIntToPos" ordinal="17"/>
+		<entry name="sceCdGetToc2" ordinal="19"/>
+		<entry name="sceCdReadDVDV" ordinal="20"/>
+		<entry name="sceCdCheckCmd" ordinal="21"/>
+		<entry name="sceCdRI" ordinal="22"/>
+		<entry name="sceCdWI" ordinal="23"/>
+		<entry name="sceCdReadClock" ordinal="24"/>
+		<entry name="sceCdWriteClock" ordinal="25"/>
+		<entry name="sceCdStatus" ordinal="28"/>
+		<entry name="sceCdApplySCmd" ordinal="29"/>
+		<entry name="sceCdSetHDMode" ordinal="30"/>
+		<entry name="sceCdOpenConfig" ordinal="31"/>
+		<entry name="sceCdCloseConfig" ordinal="32"/>
+		<entry name="sceCdReadConfig" ordinal="33"/>
+		<entry name="sceCdWriteConfig" ordinal="34"/>
+		<entry name="sceCdReadKey" ordinal="35"/>
+		<entry name="sceCdDecSet" ordinal="36"/>
+		<entry name="sceCdCallback" ordinal="37"/>
+		<entry name="sceCdPause" ordinal="38"/>
+		<entry name="sceCdBreak" ordinal="39"/>
+		<entry name="sceCdReadCDDA" ordinal="40"/>
+		<entry name="sceCdReadConsoleID" ordinal="41"/>
+		<entry name="sceCdWriteConsoleID" ordinal="42"/>
+		<entry name="sceCdMV" ordinal="43"/>
+		<entry name="sceCdGetReadPos" ordinal="44"/>
+		<entry name="sceCdCtrlADout" ordinal="45"/>
+		<entry name="sceCdNop" ordinal="46"/>
+		<entry name="sceGetFsvRbuf" ordinal="47"/>
+		<entry name="sceCdstm0Cb" ordinal="48"/>
+		<entry name="sceCdstm1Cb" ordinal="49"/>
+		<entry name="sceCdSC" ordinal="50"/>
+		<entry name="sceCdRC" ordinal="51"/>
+		<entry name="sceCdForbidDVDP" ordinal="52"/>
+		<entry name="sceCdReadSUBQ" ordinal="53"/>
+		<entry name="sceCdApplyNCmd" ordinal="54"/>
+		<entry name="sceCdAutoAdjustCtrl" ordinal="55"/>
+		<entry name="sceCdStInit" ordinal="56"/>
+		<entry name="sceCdStRead" ordinal="57"/>
+		<entry name="sceCdStSeek" ordinal="58"/>
+		<entry name="sceCdStStart" ordinal="59"/>
+		<entry name="sceCdStStat" ordinal="60"/>
+		<entry name="sceCdStStop" ordinal="61"/>
+		<entry name="sceCdRead0" ordinal="62"/>
+		<entry name="sceCdRV" ordinal="63"/>
+		<entry name="sceCdRM" ordinal="64"/>
+		<entry name="sceCdWM" ordinal="65"/>
+		<entry name="sceCdReadChain" ordinal="66"/>
+		<entry name="sceCdStPause" ordinal="67"/>
+		<entry name="sceCdStResume" ordinal="68"/>
+		<entry name="sceCdForbidRead" ordinal="69"/>
+		<entry name="sceCdBootCertify" ordinal="70"/>
+		<entry name="sceCdSpinCtrlIOP" ordinal="71"/>
+		<entry name="sceCdBlueLEDCtl" ordinal="72"/>
+		<entry name="sceCdCancelPOffRdy" ordinal="73"/>
+		<entry name="sceCdPowerOff" ordinal="74"/>
+		<entry name="sceCdMmode" ordinal="75"/>
+		<entry name="sceCdReadFull" ordinal="76"/>
+		<entry name="sceCdStSeekF" ordinal="77"/>
+		<entry name="sceCdPOffCallback" ordinal="78"/>
+		<entry name="sceCdReadDiskID" ordinal="79"/>
+		<entry name="sceCdReadGUID" ordinal="80"/>
+		<entry name="sceCdSetTimeout" ordinal="81"/>
+		<entry name="sceCdReadModelID" ordinal="82"/>
+		<entry name="sceCdReadDvdDualInfo" ordinal="83"/>
+		<entry name="sceCdLayerSearchFile" ordinal="84"/>
+		<entry name="sceCdStatus2" ordinal="90"/>
+		<entry name="sceCdApplySCmd2" ordinal="112"/>
+		<entry name="sceCdRE" ordinal="114"/>
+		<entry name="sceCdRcBypassCtl" ordinal="115"/>
+	</module>
+	<module name="ioman_mod">
+		<entry name="io_open" ordinal="4"/>
+		<entry name="io_close" ordinal="5"/>
+		<entry name="io_read" ordinal="6"/>
+		<entry name="io_write" ordinal="7"/>
+		<entry name="io_lseek" ordinal="8"/>
+		<entry name="io_ioctl" ordinal="9"/>
+		<entry name="io_remove" ordinal="10"/>
+		<entry name="io_mkdir" ordinal="11"/>
+		<entry name="io_rmdir" ordinal="12"/>
+		<entry name="io_dopen" ordinal="13"/>
+		<entry name="io_dclose" ordinal="14"/>
+		<entry name="io_dread" ordinal="15"/>
+		<entry name="io_getstat" ordinal="16"/>
+		<entry name="io_chstat" ordinal="17"/>
+		<entry name="io_format" ordinal="18"/>
+		<entry name="io_AddDrv" ordinal="20"/>
+		<entry name="io_DelDrv" ordinal="21"/>
+	</module>
+	<module name="">
+		<entry name="FreeLoadMemory" ordinal="27"/>
+		<entry name="GetThreadCurrentPriority" ordinal="42"/>
+		<entry name="GetSystemTimeLow" ordinal="43"/>
+		<entry name="ReferSystemStatus" ordinal="44"/>
+		<entry name="ReferThreadRunStatus" ordinal="45"/>
+		<entry name="GetThreadStackFreeSize" ordinal="46"/>
+		<entry name="GetThreadmanIdList" ordinal="47"/>
+		<entry name="GetModuleIdList" ordinal="16"/>
+		<entry name="ReferModuleStatus" ordinal="17"/>
+		<entry name="GetModuleIdListByName" ordinal="18"/>
+		<entry name="LoadModuleWithOption" ordinal="19"/>
+		<entry name="SetTimerHandler" ordinal="20"/>
+		<entry name="SetOverflowHandler" ordinal="21"/>
+		<entry name="SetupHardTimer" ordinal="22"/>
+		<entry name="StartHardTimer" ordinal="23"/>
+		<entry name="StopHardTimer" ordinal="24"/>
+		<entry name="SelfUnloadModule" ordinal="25"/>
+		<entry name="AllocLoadMemory" ordinal="26"/>
+		<entry name="SetModuleFlags" ordinal="28"/>
+	</module>
+	<module name="iomanX">
+		<entry name="GetDeviceList" ordinal="3"/>
+		<entry name="open" ordinal="4"/>
+		<entry name="close" ordinal="5"/>
+		<entry name="read" ordinal="6"/>
+		<entry name="write" ordinal="7"/>
+		<entry name="lseek" ordinal="8"/>
+		<entry name="ioctl" ordinal="9"/>
+		<entry name="remove" ordinal="10"/>
+		<entry name="mkdir" ordinal="11"/>
+		<entry name="rmdir" ordinal="12"/>
+		<entry name="dopen" ordinal="13"/>
+		<entry name="dclose" ordinal="14"/>
+		<entry name="dread" ordinal="15"/>
+		<entry name="getstat" ordinal="16"/>
+		<entry name="chstat" ordinal="17"/>
+		<entry name="format" ordinal="18"/>
+		<entry name="rename" ordinal="25"/>
+		<entry name="chdir" ordinal="26"/>
+		<entry name="sync" ordinal="27"/>
+		<entry name="mount" ordinal="28"/>
+		<entry name="umount" ordinal="29"/>
+		<entry name="lseek64" ordinal="30"/>
+		<entry name="devctl" ordinal="31"/>
+		<entry name="symlink" ordinal="32"/>
+		<entry name="readlink" ordinal="33"/>
+		<entry name="ioctl2" ordinal="34"/>
+		<entry name="AddDrv" ordinal="20"/>
+		<entry name="DelDrv" ordinal="21"/>
+		<entry name="StdioInit" ordinal="23"/>
+	</module>
+	<module name="libsd">
+		<entry name="sceSdQuit" ordinal="2"/>
+		<entry name="sceSdInit" ordinal="4"/>
+		<entry name="sceSdSetIRQCallback" ordinal="22"/>
+		<entry name="sceSdSetTransCallback" ordinal="21"/>
+		<entry name="sceSdSetParam" ordinal="5"/>
+		<entry name="sceSdGetParam" ordinal="6"/>
+		<entry name="sceSdSetCoreAttr" ordinal="11"/>
+		<entry name="sceSdGetCoreAttr" ordinal="12"/>
+		<entry name="sceSdClearEffectWorkArea" ordinal="25"/>
+		<entry name="sceSdSetAddr" ordinal="9"/>
+		<entry name="sceSdGetAddr" ordinal="10"/>
+		<entry name="sceSdSetSwitch" ordinal="7"/>
+		<entry name="sceSdGetSwitch" ordinal="8"/>
+		<entry name="sceSdNote2Pitch" ordinal="13"/>
+		<entry name="sceSdPitch2Note" ordinal="14"/>
+		<entry name="sceSdSetEffectAttr" ordinal="23"/>
+		<entry name="sceSdGetEffectAttr" ordinal="24"/>
+		<entry name="sceSdProcBatch" ordinal="15"/>
+		<entry name="sceSdProcBatchEx" ordinal="16"/>
+		<entry name="sceSdVoiceTrans" ordinal="17"/>
+		<entry name="sceSdBlockTrans" ordinal="18"/>
+		<entry name="sceSdVoiceTransStatus" ordinal="19"/>
+		<entry name="sceSdBlockTransStatus" ordinal="20"/>
+		<entry name="sceSdSetTransIntrHandler" ordinal="26"/>
+		<entry name="sceSdSetSpu2IntrHandler" ordinal="27"/>
+		<entry name="sceSdGetTransIntrHandlerArgument" ordinal="28"/>
+		<entry name="sceSdGetSpu2IntrHandlerArgument" ordinal="29"/>
+		<entry name="sceSdStopTrans" ordinal="30"/>
+		<entry name="sceSdCleanEffectWorkArea" ordinal="31"/>
+		<entry name="sceSdSetEffectMode" ordinal="32"/>
+		<entry name="sceSdSetEffectModeParams" ordinal="33"/>
+	</module>
+	<module name="sior">
+		<entry name="sio_init" ordinal="4"/>
+		<entry name="sio_putc" ordinal="5"/>
+		<entry name="sio_getc" ordinal="6"/>
+		<entry name="sio_getc_block" ordinal="7"/>
+		<entry name="sio_write" ordinal="8"/>
+		<entry name="sio_read" ordinal="9"/>
+		<entry name="sio_puts" ordinal="10"/>
+		<entry name="sio_putsn" ordinal="11"/>
+		<entry name="sio_gets" ordinal="12"/>
+		<entry name="sio_flush" ordinal="13"/>
+		<entry name="sio_printf" ordinal="14"/>
+		<entry name="sio_vprintf" ordinal="15"/>
+	</module>
+	<module name="thfpool">
+		<entry name="CreateFpl" ordinal="4"/>
+		<entry name="DeleteFpl" ordinal="5"/>
+		<entry name="AllocateFpl" ordinal="6"/>
+		<entry name="pAllocateFpl" ordinal="7"/>
+		<entry name="ipAllocateFpl" ordinal="8"/>
+		<entry name="FreeFpl" ordinal="9"/>
+		<entry name="ReferFplStatus" ordinal="11"/>
+		<entry name="iReferFplStatus" ordinal="12"/>
+	</module>
+	<module name="thvpool">
+		<entry name="CreateVpl" ordinal="4"/>
+		<entry name="DeleteVpl" ordinal="5"/>
+		<entry name="AllocateVpl" ordinal="6"/>
+		<entry name="pAllocateVpl" ordinal="7"/>
+		<entry name="ipAllocateVpl" ordinal="8"/>
+		<entry name="FreeVpl" ordinal="9"/>
+		<entry name="ReferVplStatus" ordinal="11"/>
+		<entry name="iReferVplStatus" ordinal="12"/>
+	</module>
+	<module name="padman">
+		<entry name="padInit" ordinal="4"/>
+		<entry name="padEnd" ordinal="5"/>
+		<entry name="padPortOpen" ordinal="6"/>
+		<entry name="padPortClose" ordinal="7"/>
+		<entry name="padGetInBuffer" ordinal="8"/>
+		<entry name="padSetupEEButtonData" ordinal="9"/>
+		<entry name="padGetModeConfig" ordinal="10"/>
+		<entry name="padInfoAct" ordinal="11"/>
+		<entry name="padInfoComb" ordinal="12"/>
+		<entry name="padInfoMode" ordinal="13"/>
+		<entry name="padSetMainMode" ordinal="14"/>
+		<entry name="padSetActDirect" ordinal="15"/>
+		<entry name="padSetActAlign" ordinal="16"/>
+		<entry name="padGetButtonMask" ordinal="17"/>
+		<entry name="padGetButtonInfo" ordinal="18"/>
+	</module>
+	<module name="secrman">
+		<entry name="SecrSetMcCommandHandler" ordinal="4"/>
+		<entry name="SecrSetMcDevIDHandler" ordinal="5"/>
+		<entry name="SecrAuthCard" ordinal="6"/>
+		<entry name="SecrResetAuthCard" ordinal="7"/>
+		<entry name="SecrCardBootHeader" ordinal="8"/>
+		<entry name="SecrCardBootBlock" ordinal="9"/>
+		<entry name="SecrCardBootFile" ordinal="10"/>
+		<entry name="SecrDiskBootHeader" ordinal="11"/>
+		<entry name="SecrDiskBootBlock" ordinal="12"/>
+		<entry name="SecrDiskBootFile" ordinal="13"/>
+		<entry name="SecrDownloadHeader" ordinal="14"/>
+		<entry name="SecrDownloadBlock" ordinal="15"/>
+		<entry name="SecrDownloadFile" ordinal="16"/>
+		<entry name="SecrDownloadGetKbit" ordinal="17"/>
+		<entry name="SecrDownloadGetKc" ordinal="18"/>
+		<entry name="SecrDownloadGetICVPS2" ordinal="19"/>
+	</module>
+	<module name="modload">
+		<entry name="GetModloadInternalData" ordinal="3"/>
+		<entry name="ReBootStart" ordinal="4"/>
+		<entry name="LoadModuleAddress" ordinal="5"/>
+		<entry name="LoadModule" ordinal="6"/>
+		<entry name="LoadStartModule" ordinal="7"/>
+		<entry name="StartModule" ordinal="8"/>
+		<entry name="LoadModuleBufferAddress" ordinal="9"/>
+		<entry name="LoadModuleBuffer" ordinal="10"/>
+		<entry name="SetSecrmanCallbacks" ordinal="12"/>
+		<entry name="SetCheckKelfPathCallback" ordinal="13"/>
+	</module>
+	<module name="vblank">
+		<entry name="WaitVblankStart" ordinal="4"/>
+		<entry name="WaitVblankEnd" ordinal="5"/>
+		<entry name="WaitVblank" ordinal="6"/>
+		<entry name="WaitNonVblank" ordinal="7"/>
+		<entry name="RegisterVblankHandler" ordinal="8"/>
+		<entry name="ReleaseVblankHandler" ordinal="9"/>
+	</module>
+	<module name="thmsgbx">
+		<entry name="CreateMbx" ordinal="4"/>
+		<entry name="DeleteMbx" ordinal="5"/>
+		<entry name="SendMbx" ordinal="6"/>
+		<entry name="iSendMbx" ordinal="7"/>
+		<entry name="ReceiveMbx" ordinal="8"/>
+		<entry name="PollMbx" ordinal="9"/>
+		<entry name="ReferMbxStatus" ordinal="11"/>
+		<entry name="iReferMbxStatus" ordinal="12"/>
+	</module>
+	<module name="thbase">
+		<entry name="CreateThread" ordinal="4"/>
+		<entry name="DeleteThread" ordinal="5"/>
+		<entry name="StartThread" ordinal="6"/>
+		<entry name="StartThreadArgs" ordinal="7"/>
+		<entry name="ExitThread" ordinal="8"/>
+		<entry name="ExitDeleteThread" ordinal="9"/>
+		<entry name="TerminateThread" ordinal="10"/>
+		<entry name="iTerminateThread" ordinal="11"/>
+		<entry name="ChangeThreadPriority" ordinal="14"/>
+		<entry name="iChangeThreadPriority" ordinal="15"/>
+		<entry name="RotateThreadReadyQueue" ordinal="16"/>
+		<entry name="iRotateThreadReadyQueue" ordinal="17"/>
+		<entry name="ReleaseWaitThread" ordinal="18"/>
+		<entry name="iReleaseWaitThread" ordinal="19"/>
+		<entry name="GetThreadId" ordinal="20"/>
+		<entry name="CheckThreadStack" ordinal="21"/>
+		<entry name="ReferThreadStatus" ordinal="22"/>
+		<entry name="iReferThreadStatus" ordinal="23"/>
+		<entry name="SleepThread" ordinal="24"/>
+		<entry name="WakeupThread" ordinal="25"/>
+		<entry name="iWakeupThread" ordinal="26"/>
+		<entry name="CancelWakeupThread" ordinal="27"/>
+		<entry name="iCancelWakeupThread" ordinal="28"/>
+		<entry name="DelayThread" ordinal="33"/>
+		<entry name="GetSystemTime" ordinal="34"/>
+		<entry name="SetAlarm" ordinal="35"/>
+		<entry name="iSetAlarm" ordinal="36"/>
+		<entry name="CancelAlarm" ordinal="37"/>
+		<entry name="iCancelAlarm" ordinal="38"/>
+		<entry name="USec2SysClock" ordinal="39"/>
+		<entry name="SysClock2USec" ordinal="40"/>
+		<entry name="GetSystemStatusFlag" ordinal="41"/>
+	</module>
+	<module name="loadcore">
+		<entry name="GetLoadcoreInternalData" ordinal="3"/>
+		<entry name="FlushIcache" ordinal="4"/>
+		<entry name="FlushDcache" ordinal="5"/>
+		<entry name="RegisterLibraryEntries" ordinal="6"/>
+		<entry name="ReleaseLibraryEntries" ordinal="7"/>
+		<entry name="RegisterNonAutoLinkEntries" ordinal="10"/>
+		<entry name="QueryLibraryEntryTable" ordinal="11"/>
+		<entry name="QueryBootMode" ordinal="12"/>
+		<entry name="RegisterBootMode" ordinal="13"/>
+		<entry name="RegisterBootCallback" ordinal="20"/>
+	</module>
+	<module name="sifcmd">
+		<entry name="sceSifInitCmd" ordinal="4"/>
+		<entry name="sceSifExitCmd" ordinal="5"/>
+		<entry name="sceSifGetSreg" ordinal="6"/>
+		<entry name="sceSifSetSreg" ordinal="7"/>
+		<entry name="sceSifSetCmdBuffer" ordinal="8"/>
+		<entry name="sceSifSetSysCmdBuffer" ordinal="9"/>
+		<entry name="sceSifAddCmdHandler" ordinal="10"/>
+		<entry name="sceSifRemoveCmdHandler" ordinal="11"/>
+		<entry name="sceSifSendCmd" ordinal="12"/>
+		<entry name="isceSifSendCmd" ordinal="13"/>
+		<entry name="sceSifInitRpc" ordinal="14"/>
+		<entry name="sceSifBindRpc" ordinal="15"/>
+		<entry name="sceSifCallRpc" ordinal="16"/>
+		<entry name="sceSifRegisterRpc" ordinal="17"/>
+		<entry name="sceSifCheckStatRpc" ordinal="18"/>
+		<entry name="sceSifSetRpcQueue" ordinal="19"/>
+		<entry name="sceSifGetNextRequest" ordinal="20"/>
+		<entry name="sceSifExecRequest" ordinal="21"/>
+		<entry name="sceSifRpcLoop" ordinal="22"/>
+		<entry name="sceSifGetOtherData" ordinal="23"/>
+		<entry name="sceSifRemoveRpc" ordinal="24"/>
+		<entry name="sceSifRemoveRpcQueue" ordinal="25"/>
+		<entry name="sceSifSetSif1CB" ordinal="26"/>
+		<entry name="sceSifClearSif1CB" ordinal="27"/>
+		<entry name="sceSifSendCmdIntr" ordinal="28"/>
+		<entry name="isceSifSendCmdIntr" ordinal="29"/>
+	</module>
+	<module name="thsemap">
+		<entry name="CreateSema" ordinal="4"/>
+		<entry name="DeleteSema" ordinal="5"/>
+		<entry name="SignalSema" ordinal="6"/>
+		<entry name="iSignalSema" ordinal="7"/>
+		<entry name="WaitSema" ordinal="8"/>
+		<entry name="PollSema" ordinal="9"/>
+		<entry name="ReferSemaStatus" ordinal="11"/>
+		<entry name="iReferSemaStatus" ordinal="12"/>
+	</module>
+	<module name="xsio2man">
+		<entry name="sio2_transfer_reset" ordinal="26"/>
+		<entry name="sio2_mtap_transfer_init" ordinal="48"/>
+		<entry name="sio2_transfer2" ordinal="49"/>
+		<entry name="sio2_transfer_reset2" ordinal="50"/>
+		<entry name="sio2_mtap_change_slot_set" ordinal="51"/>
+		<entry name="sio2_mtap_get_slot_max_set" ordinal="52"/>
+		<entry name="sio2_mtap_get_slot_max2_set" ordinal="53"/>
+		<entry name="sio2_mtap_update_slots_set" ordinal="54"/>
+		<entry name="sio2_mtap_change_slot" ordinal="55"/>
+		<entry name="sio2_mtap_get_slot_max" ordinal="56"/>
+		<entry name="sio2_mtap_get_slot_max2" ordinal="57"/>
+		<entry name="sio2_mtap_update_slots" ordinal="58"/>
+	</module>
+	<module name="stdio">
+		<entry name="printf" ordinal="4"/>
+		<entry name="getchar" ordinal="5"/>
+		<entry name="putchar" ordinal="6"/>
+		<entry name="puts" ordinal="7"/>
+		<entry name="gets" ordinal="8"/>
+		<entry name="fdprintf" ordinal="9"/>
+		<entry name="fdgetc" ordinal="10"/>
+		<entry name="fdputc" ordinal="11"/>
+		<entry name="fdputs" ordinal="12"/>
+		<entry name="fdgets" ordinal="13"/>
+		<entry name="vfdprintf" ordinal="14"/>
+	</module>
+	<module name="excepman">
+		<entry name="RegisterExceptionHandler" ordinal="4"/>
+		<entry name="RegisterPriorityExceptionHandler" ordinal="5"/>
+		<entry name="RegisterDefaultExceptionHandler" ordinal="6"/>
+		<entry name="ReleaseExceptionHandler" ordinal="7"/>
+		<entry name="ReleaseDefaultExceptionHandler" ordinal="8"/>
+	</module>
+	<module name="ssbusc">
+		<entry name="SetDelay" ordinal="4"/>
+		<entry name="GetDelay" ordinal="5"/>
+		<entry name="SetBaseAddress" ordinal="6"/>
+		<entry name="GetBaseAddress" ordinal="7"/>
+		<entry name="SetRecoveryTime" ordinal="8"/>
+		<entry name="GetRecoveryTime" ordinal="9"/>
+		<entry name="SetHoldTime" ordinal="10"/>
+		<entry name="GetHoldTime" ordinal="11"/>
+		<entry name="SetFloatTime" ordinal="12"/>
+		<entry name="GetFloatTime" ordinal="13"/>
+		<entry name="SetStrobeTime" ordinal="14"/>
+		<entry name="GetStrobeTime" ordinal="15"/>
+		<entry name="SetCommonDelay" ordinal="16"/>
+		<entry name="GetCommonDelay" ordinal="17"/>
+	</module>
+	<module name="ioman">
+		<entry name="open" ordinal="4"/>
+		<entry name="close" ordinal="5"/>
+		<entry name="read" ordinal="6"/>
+		<entry name="write" ordinal="7"/>
+		<entry name="lseek" ordinal="8"/>
+		<entry name="ioctl" ordinal="9"/>
+		<entry name="remove" ordinal="10"/>
+		<entry name="mkdir" ordinal="11"/>
+		<entry name="rmdir" ordinal="12"/>
+		<entry name="dopen" ordinal="13"/>
+		<entry name="dclose" ordinal="14"/>
+		<entry name="dread" ordinal="15"/>
+		<entry name="getstat" ordinal="16"/>
+		<entry name="chstat" ordinal="17"/>
+		<entry name="format" ordinal="18"/>
+		<entry name="AddDrv" ordinal="20"/>
+		<entry name="DelDrv" ordinal="21"/>
+	</module>
+	<module name="intrman">
+		<entry name="RegisterIntrHandler" ordinal="4"/>
+		<entry name="ReleaseIntrHandler" ordinal="5"/>
+		<entry name="EnableIntr" ordinal="6"/>
+		<entry name="DisableIntr" ordinal="7"/>
+		<entry name="CpuDisableIntr" ordinal="8"/>
+		<entry name="CpuEnableIntr" ordinal="9"/>
+		<entry name="CpuInvokeInKmode" ordinal="14"/>
+		<entry name="DisableDispatchIntr" ordinal="15"/>
+		<entry name="EnableDispatchIntr" ordinal="16"/>
+		<entry name="CpuSuspendIntr" ordinal="17"/>
+		<entry name="CpuResumeIntr" ordinal="18"/>
+		<entry name="QueryIntrContext" ordinal="23"/>
+		<entry name="QueryIntrStack" ordinal="24"/>
+		<entry name="iCatchMultiIntr" ordinal="25"/>
+	</module>
+	<module name="dmacman">
+		<entry name="dmac_ch_set_madr" ordinal="4"/>
+		<entry name="dmac_ch_get_madr" ordinal="5"/>
+		<entry name="dmac_ch_set_bcr" ordinal="6"/>
+		<entry name="dmac_ch_get_bcr" ordinal="7"/>
+		<entry name="dmac_ch_set_chcr" ordinal="8"/>
+		<entry name="dmac_ch_get_chcr" ordinal="9"/>
+		<entry name="dmac_ch_set_tadr" ordinal="10"/>
+		<entry name="dmac_ch_get_tadr" ordinal="11"/>
+		<entry name="dmac_set_dpcr" ordinal="14"/>
+		<entry name="dmac_get_dpcr" ordinal="15"/>
+		<entry name="dmac_set_dpcr2" ordinal="16"/>
+		<entry name="dmac_get_dpcr2" ordinal="17"/>
+		<entry name="dmac_set_dpcr3" ordinal="18"/>
+		<entry name="dmac_get_dpcr3" ordinal="19"/>
+		<entry name="dmac_set_dicr" ordinal="20"/>
+		<entry name="dmac_get_dicr" ordinal="21"/>
+		<entry name="dmac_set_dicr2" ordinal="22"/>
+		<entry name="dmac_get_dicr2" ordinal="23"/>
+		<entry name="dmac_request" ordinal="28"/>
+		<entry name="dmac_transfer" ordinal="32"/>
+		<entry name="dmac_ch_set_dpcr" ordinal="33"/>
+		<entry name="dmac_enable" ordinal="34"/>
+		<entry name="dmac_disable" ordinal="35"/>
+	</module>
+	<module name="xmtapman">
+		<entry name="mtapPortOpen" ordinal="4"/>
+		<entry name="mtapPortClose" ordinal="5"/>
+		<entry name="mtapGetSlotNumber" ordinal="6"/>
+		<entry name="mtapChangeSlot" ordinal="7"/>
+	</module>
+	<module name="thevent">
+		<entry name="CreateEventFlag" ordinal="4"/>
+		<entry name="DeleteEventFlag" ordinal="5"/>
+		<entry name="SetEventFlag" ordinal="6"/>
+		<entry name="iSetEventFlag" ordinal="7"/>
+		<entry name="ClearEventFlag" ordinal="8"/>
+		<entry name="iClearEventFlag" ordinal="9"/>
+		<entry name="WaitEventFlag" ordinal="10"/>
+		<entry name="PollEventFlag" ordinal="11"/>
+		<entry name="ReferEventFlagStatus" ordinal="13"/>
+		<entry name="iReferEventFlagStatus" ordinal="14"/>
+	</module>
+	<module name="sifman">
+		<entry name="sceSifDma2Init" ordinal="4"/>
+		<entry name="sceSifInit" ordinal="5"/>
+		<entry name="sceSifSetDChain" ordinal="6"/>
+		<entry name="sceSifSetDma" ordinal="7"/>
+		<entry name="sceSifDmaStat" ordinal="8"/>
+		<entry name="sceSifSetOneDma" ordinal="9"/>
+		<entry name="sceSifDma0Transfer" ordinal="12"/>
+		<entry name="sceSifDma0Sync" ordinal="13"/>
+		<entry name="sceSifDma0Sending" ordinal="14"/>
+		<entry name="sceSifDma1Transfer" ordinal="15"/>
+		<entry name="sceSifDma1Sync" ordinal="16"/>
+		<entry name="sceSifDma1Sending" ordinal="17"/>
+		<entry name="sceSifDma2Transfer" ordinal="18"/>
+		<entry name="sceSifDma2Sync" ordinal="19"/>
+		<entry name="sceSifDma2Sending" ordinal="20"/>
+		<entry name="sceSifGetMSFlag" ordinal="21"/>
+		<entry name="sceSifSetMSFlag" ordinal="22"/>
+		<entry name="sceSifGetSMFlag" ordinal="23"/>
+		<entry name="sceSifSetSMFlag" ordinal="24"/>
+		<entry name="sceSifGetMainAddr" ordinal="25"/>
+		<entry name="sceSifGetSubAddr" ordinal="26"/>
+		<entry name="sceSifSetSubAddr" ordinal="27"/>
+		<entry name="sceSifIntrMain" ordinal="28"/>
+		<entry name="sceSifCheckInit" ordinal="29"/>
+		<entry name="sceSifSetDmaIntrHandler" ordinal="30"/>
+		<entry name="sceSifResetDmaIntrHandler" ordinal="31"/>
+		<entry name="sceSifSetDmaIntr" ordinal="32"/>
+	</module>
+	<module name="iopdebug">
+		<entry name="iop_dbg_install" ordinal="5"/>
+		<entry name="iop_dbg_remove" ordinal="6"/>
+		<entry name="iop_dbg_get_handler" ordinal="7"/>
+		<entry name="iop_dbg_set_handler" ordinal="8"/>
+		<entry name="iop_dbg_get_reg_frames" ordinal="9"/>
+		<entry name="iop_dbg_get_dcic" ordinal="10"/>
+		<entry name="iop_dbg_set_dcic" ordinal="11"/>
+		<entry name="iop_dbg_get_bpc" ordinal="12"/>
+		<entry name="iop_dbg_set_bpc" ordinal="13"/>
+		<entry name="iop_dbg_get_bpcm" ordinal="14"/>
+		<entry name="iop_dbg_set_bpcm" ordinal="15"/>
+		<entry name="iop_dbg_bda" ordinal="16"/>
+		<entry name="iop_dbg_set_bda" ordinal="17"/>
+		<entry name="iop_dbg_bdam" ordinal="18"/>
+		<entry name="iop_dbg_bdam" ordinal="19"/>
+		<entry name="iop_dbg_set_bpr" ordinal="20"/>
+		<entry name="iop_dbg_set_bpw" ordinal="21"/>
+		<entry name="iop_dbg_bpx" ordinal="22"/>
+		<entry name="iop_dbg_clr_bps" ordinal="23"/>
+		<entry name="iop_dbg_clr_bpda" ordinal="24"/>
+		<entry name="iop_dbg_clr_bpx" ordinal="25"/>
+	</module>
+	<module name="ioptrap">
+		<entry name="get_exception_name" ordinal="4"/>
+		<entry name="dbg_setjmp" ordinal="5"/>
+		<entry name="set_exception_handler" ordinal="6"/>
+		<entry name="get_exception_handler" ordinal="7"/>
+		<entry name="set_dba" ordinal="8"/>
+		<entry name="set_dbam" ordinal="9"/>
+		<entry name="set_dcic" ordinal="10"/>
+		<entry name="get_dba" ordinal="11"/>
+		<entry name="get_dbam" ordinal="12"/>
+		<entry name="get_dcic" ordinal="13"/>
+	</module>
+</modules>

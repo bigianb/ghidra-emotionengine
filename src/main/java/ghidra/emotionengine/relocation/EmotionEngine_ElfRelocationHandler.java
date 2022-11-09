@@ -28,6 +28,9 @@ import ghidra.program.model.mem.*;
 import ghidra.util.classfinder.ExtensionPointProperties;
 import ghidra.util.exception.NotFoundException;
 
+import static ghidra.emotionengine.EmotionEngine_ElfExtension.E_MIPS_MACH_5900;
+import static ghidra.emotionengine.EmotionEngine_ElfExtension.ET_IRX2;
+
 @ExtensionPointProperties(priority = 2)
 public class EmotionEngine_ElfRelocationHandler extends MIPS_ElfRelocationHandler {
 
@@ -46,9 +49,6 @@ public class EmotionEngine_ElfRelocationHandler extends MIPS_ElfRelocationHandle
 	private static final int LOW_MASK = 0xffff;
 	private static final int HIGH_MASK = 0xffff0000;
 	private static final int DVP_MASK = 0x7FFFFFF0;
-	
-	public static final short ET_IRX2 = -127;
-	public static final int E_MIPS_MACH_5900 = 0x00920000;
 
 	@Override
 	public boolean canRelocate(ElfHeader elf) {
