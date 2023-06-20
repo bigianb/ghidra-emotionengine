@@ -16,10 +16,10 @@ import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.app.util.bin.format.elf.extend.MIPS_ElfExtension;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.app.util.opinion.*;
-import ghidra.emotionengine.demangler.MetrowerksDemangler;
 import ghidra.emotionengine.iop.IopModule;
 import ghidra.emotionengine.iop.IopModuleUtil;
 import ghidra.framework.model.DomainFolder;
+import ghidra.framework.model.Project;
 import ghidra.program.model.address.*;
 import ghidra.program.model.data.DataType;
 import ghidra.program.model.data.PointerDataType;
@@ -130,45 +130,14 @@ public class EmotionEngineLoader extends ElfLoader {
 				}
 			}
 		}
-		setDemanglerFormat(program, log);
-	}
-
-	private void setDemanglerFormat(Program program, MessageLog log) {
-		boolean isMw = false;
-		for (MemoryBlock block : program.getMemory().getBlocks()) {
-			if (block.getName().startsWith(MW_CATS)) {
-				isMw = true;
-				break;
-			}
-			if (block.getName().equals(".comment")) {
-				CreateStringCmd cmd = new CreateStringCmd(block.getStart());
-				if (cmd.applyTo(program)) {
-					Listing listing = program.getListing();
-					Data data = listing.getDataAt(block.getStart());
-					if (data != null && data.getValueClass() == String.class) {
-						isMw = ((String) data.getValue()).startsWith("MW MIPS C Compiler");
-						break;
-					}
-				}
-			}
-		}
-
-		if (isMw) {
-			PropertyMapManager manager = program.getUsrPropertyManager();
-			try {
-				manager.createVoidPropertyMap(MetrowerksDemangler.METROWERKS_DEMANGLER_PROPERTY);
-			} catch (DuplicateNameException e) {
-				throw new AssertException(e);
-			}
-		}
 	}
 
 	@Override
-	protected void postLoadProgramFixups(List<LoadedProgram> loadedPrograms,
+	protected void postLoadProgramFixups(List<Loaded<Program>> loadedPrograms, Project project,
 			List<Option> options, MessageLog messageLog, TaskMonitor monitor)
 			throws CancelledException, IOException {
-		for (LoadedProgram loadedProgram : loadedPrograms) {
-			Program program = loadedProgram.program();
+		for (Loaded<Program> loadedProgram : loadedPrograms) {
+			Program program = loadedProgram.getDomainObject();
 			monitor.checkCanceled();
 			int id = program.startTransaction(RELOCATION_TRANSACTION_MESSAGE);
 			// TODO setup heap memory block if applicable
@@ -230,7 +199,7 @@ public class EmotionEngineLoader extends ElfLoader {
 			}
 			program.endTransaction(id, true);
 		}
-		super.postLoadProgramFixups(loadedPrograms, options, messageLog, monitor);
+		super.postLoadProgramFixups(loadedPrograms, project, options, messageLog, monitor);
 	}
 
 	@Override

@@ -7,7 +7,6 @@ import ghidra.app.util.demangler.gnu.GnuDemanglerFormat;
 import ghidra.app.util.demangler.gnu.GnuDemanglerOptions;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.emotionengine.EmotionEngineLoader;
-import ghidra.emotionengine.demangler.MetrowerksDemangler;
 import ghidra.framework.options.Options;
 import ghidra.program.model.listing.Program;
 import ghidra.util.HelpLocation;
@@ -69,11 +68,7 @@ public class EmotionEngineDemanglerAnalyzer extends AbstractDemanglerAnalyzer {
 	}
 
 	private void setDemangler(Program program) {
-		if (MetrowerksDemangler.isMetrowerksProgram(program)) {
-			this.demangler = new MetrowerksDemangler();
-		} else {
-			this.demangler = new GnuDemangler();
-		}
+		this.demangler = new GnuDemangler();
 	}
 
 }

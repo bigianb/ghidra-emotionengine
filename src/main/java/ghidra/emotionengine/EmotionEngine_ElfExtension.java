@@ -7,7 +7,6 @@ import ghidra.app.util.bin.format.elf.*;
 import ghidra.app.util.bin.format.elf.extend.MIPS_ElfExtension;
 import ghidra.emotionengine.dvp.DvpOverlayTable;
 import ghidra.emotionengine.iop.IopModSection;
-import ghidra.emotionengine.mw.MwCatsSection;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.mem.Memory;
@@ -99,9 +98,6 @@ public class EmotionEngine_ElfExtension extends MIPS_ElfExtension {
 					if (name != null) {
 						if (name.equals("heap") && shdr.getSize() == 0) {
 							createHeapSection(helper, shdr);
-						} else if (name.contains(".mwcats")) {
-							MwCatsSection cats = new MwCatsSection(shdr, helper);
-							cats.parse(monitor);
 						}
 					}
 				} else {

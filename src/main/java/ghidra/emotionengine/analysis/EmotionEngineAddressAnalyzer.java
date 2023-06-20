@@ -29,11 +29,8 @@
  import ghidra.app.util.importer.MessageLog;
  import ghidra.framework.options.Options;
  import ghidra.program.disassemble.Disassembler;
- import ghidra.program.model.address.Address;
- import ghidra.program.model.address.AddressRange;
- import ghidra.program.model.address.AddressRangeIterator;
- import ghidra.program.model.address.AddressSet;
- import ghidra.program.model.address.AddressSetView;
+ import ghidra.program.model.address.*;
+ import ghidra.program.model.data.DataType;
  import ghidra.program.model.lang.Processor;
  import ghidra.program.model.lang.Register;
  import ghidra.program.model.lang.RegisterValue;
@@ -59,9 +56,7 @@
  import ghidra.program.util.SymbolicPropogator;
  import ghidra.program.util.VarnodeContext;
  import ghidra.util.Msg;
- import ghidra.util.exception.AssertException;
- import ghidra.util.exception.CancelledException;
- import ghidra.util.exception.InvalidInputException;
+ import ghidra.util.exception.*;
  import ghidra.util.task.TaskMonitor;
  
  public class EmotionEngineAddressAnalyzer extends ConstantPropagationAnalyzer {
@@ -241,14 +236,15 @@
  
 		 final AddressSet coveredSet = new AddressSet();
  
+		 Address currentGPAssumptionValue = gp_assumption_value;
 		 if (func != null) {
 			 flowStart = func.getEntryPoint();
-			 if (gp_assumption_value != null) {
+			 if (currentGPAssumptionValue != null) {
 				 ProgramContext programContext = program.getProgramContext();
 				 RegisterValue gpVal = programContext.getRegisterValue(gp, flowStart);
 				 if (gpVal == null || !gpVal.hasValue()) {
 					 gpVal =
-						 new RegisterValue(gp, BigInteger.valueOf(gp_assumption_value.getOffset()));
+						 new RegisterValue(gp, BigInteger.valueOf(currentGPAssumptionValue.getOffset()));
 					 try {
 						 program.getProgramContext().setRegisterValue(func.getEntryPoint(),
 							 func.getEntryPoint(), gpVal);
@@ -262,8 +258,8 @@
  
 		 // follow all flows building up context
 		 // use context to fill out addresses on certain instructions
-		 ContextEvaluator eval = new ConstantPropagationContextEvaluator(trustWriteMemOption) {
- 
+		 ConstantPropagationContextEvaluator eval = new ConstantPropagationContextEvaluator(monitor, trustWriteMemOption) {
+			 private Address localGPAssumptionValue = currentGPAssumptionValue; 
 			 private boolean mustStopNow = false; // if something discovered in processing, mustStop flag
  
 			 @Override
@@ -281,13 +277,13 @@
 				 // this was copylefted from the arm analyzer
 				 Varnode raVal = context.getRegisterVarnodeValue(rareg);
 				 if (raVal != null) {
-					 if (raVal.isConstant()) {
+					 if (context.isConstant(raVal)) {
 						 long target = raVal.getAddress().getOffset();
 						 Address addr = instr.getMaxAddress();
 						 if (target == (addr.getOffset() + 1) && !instr.getFlowType().isCall()) {
 							 instr.setFlowOverride(FlowOverride.CALL);
 							 // need to trigger disassembly below! if not already
-							 MipsExtDisassembly(program, instr, context, addr.add(1), monitor);
+							 mipsExtDisassembly(program, instr, context, addr.add(1), monitor);
  
 							 // need to trigger re-function creation!
 							 Function f = program.getFunctionManager().getFunctionContaining(
@@ -315,8 +311,8 @@
 					 if (registerValue != null) {
 						 BigInteger value = registerValue.getUnsignedValue();
 						 long unsignedValue = value.longValue();
-						 if (gp_assumption_value == null ||
-							 !(unsignedValue == gp_assumption_value.getOffset())) {
+						 if (localGPAssumptionValue == null ||
+							 !(unsignedValue == localGPAssumptionValue.getOffset())) {
 							 synchronized (gp) {
 								 Address gpRefAddr =
 									 instr.getMinAddress().getNewAddress(unsignedValue);
@@ -331,23 +327,26 @@
 										 lastSetInstr = instructionAt;
 									 }
 								 }
-								 symEval.makeReference(context, lastSetInstr, -1,
-									 instr.getMinAddress().getAddressSpace().getSpaceID(),
-									 unsignedValue, 1, RefType.DATA, PcodeOp.UNIMPLEMENTED, true,
-									 monitor);
-								 if (gp_assumption_value == null) {
-									 program.getBookmarkManager().setBookmark(
-										 lastSetInstr.getMinAddress(), BookmarkType.WARNING,
-										 "GP Global Register Set",
-										 "Global GP Register is set here.");
-								 }
-								 if (gp_assumption_value != null &&
-									 !gp_assumption_value.equals(gpRefAddr)) {
-									 gp_assumption_value = null;
-								 }
-								 else {
-									 gp_assumption_value = gpRefAddr;
-								 }
+								 // if an instruction actually set the GP
+								if (lastSetAddr != null) {
+									symEval.makeReference(context, lastSetInstr, -1,
+										instr.getMinAddress().getAddressSpace().getSpaceID(),
+										unsignedValue, 1, null, RefType.DATA, PcodeOp.UNIMPLEMENTED, true,
+										false, monitor);
+									if (localGPAssumptionValue == null) {
+										program.getBookmarkManager().setBookmark(
+											lastSetInstr.getMinAddress(), BookmarkType.WARNING,
+											"GP Global Register Set",
+											"Global GP Register is set here.");
+									}
+									if (localGPAssumptionValue != null &&
+										!localGPAssumptionValue.equals(gpRefAddr)) {
+										localGPAssumptionValue = gp_assumption_value = null;
+									}
+									else {
+										localGPAssumptionValue = gp_assumption_value = gpRefAddr;
+									}
+								}
 							 }
 						 }
 					 }
@@ -363,7 +362,13 @@
 						 BigInteger val = context.getValue(reg, false);
 						 if (val != null) {
 							 long lval = val.longValue();
-							 Address refAddr = instr.getMinAddress().getNewAddress(lval);
+							 Address refAddr = null;
+							 try {
+								refAddr = instr.getMinAddress().getNewAddress(lval);
+							 } catch (AddressOutOfBoundsException e) {
+								// invalid reference
+								return;
+							 }
 							 if ((lval > 4096 || lval < 0) && lval != 0xffff &&
 								 program.getMemory().contains(refAddr)) {
  
@@ -380,10 +385,12 @@
  
 			 @Override
 			 public boolean evaluateReference(VarnodeContext context, Instruction instr, int pcodeop,
-					 Address address, int size, RefType refType) {
+					 Address address, int size, DataType dataType, RefType refType) {
  
 				 Address addr = address;
- 
+				 if (addr == Address.NO_ADDRESS) {
+					return false;
+				 }
 				 if (!program.getMemory().contains(addr) && refType.isData()) {
 					 // bail on an invalid address
 					 return false;
@@ -393,9 +400,7 @@
 				 }
  
 				 if ((refType.isJump() || refType.isCall()) & refType.isComputed()) {
-					 //if (refType.isJump() || refType.isCall()) {
-					 addr = MipsExtDisassembly(program, instr, context, address, monitor);
-					 //addr = flowISA(program, instr, context, address);
+					 addr = mipsExtDisassembly(program, instr, context, address, monitor);
 					 if (addr == null) {
 						 addr = address;
 					 }
@@ -403,7 +408,7 @@
  
 				 // if this is a call, some processors use the register value
 				 // used in the call for PIC calculations
-				 if (refType.isCall()) {
+				 if (refType.isCall() && !addr.isExternalAddress() ) {
 					 // set the called function to have a constant value for this register
 					 // WARNING: This might not always be the case, if called directly or with a different register
 					 //          But then it won't matter, because the function won't depend on the registers value.
@@ -419,7 +424,7 @@
 									 context.clearRegister(reg);
 									 
 									 // need to add the reference here, register operand will no longer have a value
-									 instr.addOperandReference(0,  addr, refType, SourceType.ANALYSIS);
+									 instr.addOperandReference(0,  addr, instr.getFlowType(), SourceType.ANALYSIS);
 									 
 									 // set the register value on the target address
 									 ProgramContext progContext = program.getProgramContext();
@@ -439,7 +444,7 @@
 					 }
 				 }
  
-				 return super.evaluateReference(context, instr, pcodeop, address, size, refType);
+				 return super.evaluateReference(context, instr, pcodeop, address, size, dataType, refType);
 			 }
  
 			 @Override
@@ -469,7 +474,7 @@
 					 // will pick it up.
 					 if (func != null) {
 						 Address funcAddr = func.getEntryPoint();
-						 Long value = funcAddr.getOffset();
+						 Long value = Long.valueOf(funcAddr.getOffset());
 						 try {
 							 ProgramContext progContext = program.getProgramContext();
 							 // if T9 hasn't already been set
@@ -483,6 +488,12 @@
 								 coveredSet.add(func.getBody());
 								 amgr.codeDefined(coveredSet);
 							 }
+							 else {
+								// else T9 was set at the beginning of the function
+								// something within the function must have set it to
+								// an unknown value, so can continue
+								return null;
+							}
 						 }
 						 catch (ContextChangeException e) {
 							 throw new AssertException("Unexpected Exception", e);
@@ -498,6 +509,12 @@
 			 }
 		 };
  
+		 eval.setTrustWritableMemory(trustWriteMemOption)
+			    .setMinpeculativeOffset(minSpeculativeRefAddress)
+			    .setMaxSpeculativeOffset(maxSpeculativeRefAddress)
+			    .setMinStoreLoadOffset(minStoreLoadRefAddress)
+			    .setCreateComplexDataFromPointers(createComplexDataFromPointers);
+
 		 AddressSet resultSet = symEval.flowConstants(flowStart, null, eval, true, monitor);
  
 		 // Add in any addresses we should assume got covered
@@ -507,17 +524,16 @@
 		 return resultSet;
 	 }
  
-	 Address MipsExtDisassembly(Program program, Instruction instruction, VarnodeContext context,
+	 Address mipsExtDisassembly(Program program, Instruction instruction, VarnodeContext context,
 			 Address target, TaskMonitor monitor) {
-		 if (target == null) {
+		 if (target == null || target.isExternalAddress()) {
 			 return null;
 		 }
  
 		 Address addr = instruction.getMinAddress().getNewAddress(target.getOffset() & 0xfffffffe);
 		 if (addr != null) {
 			 MemoryBlock block = program.getMemory().getBlock(addr);
-			 if (block == null || !block.isExecute() || !block.isInitialized() ||
-				 block.getName().equals("EXTERNAL")) {
+			 if (block == null || !block.isExecute() || !block.isInitialized() || block.isExternalBlock()) {
 				 return addr;
 			 }
  
@@ -677,31 +693,36 @@
 	 }
  
 	 @Override
-	 public void optionsChanged(Options options, Program program) {
-		 super.optionsChanged(options, program);
- 
-		 options.registerOption(OPTION_NAME_SWITCH_TABLE, OPTION_DEFAULT_SWITCH_TABLE, null,
+	 public void registerOptions(Options options, Program program) {
+		super.registerOptions(options, program);
+		
+		options.registerOption(OPTION_NAME_SWITCH_TABLE, trySwitchTables, null,
 			 OPTION_DESCRIPTION_SWITCH_TABLE);
  
 		 options.registerOption(OPTION_NAME_MARK_DUAL_INSTRUCTION,
-			 OPTION_DEFAULT_MARK_DUAL_INSTRUCTION, null, OPTION_DESCRIPTION_MARK_DUAL_INSTRUCTION);
+			 markupDualInstructionOption, null, OPTION_DESCRIPTION_MARK_DUAL_INSTRUCTION);
  
-		 options.registerOption(OPTION_NAME_ASSUME_T9_ENTRY, OPTION_DEFAULT_ASSUME_T9_ENTRY, null,
+		 options.registerOption(OPTION_NAME_ASSUME_T9_ENTRY, assumeT9EntryAddress, null,
 			 OPTION_DESCRIPTION_ASSUME_T9_ENTRY);
  
-		 options.registerOption(OPTION_NAME_RECOVER_GP, OPTION_DEFAULT_RECOVER_GP, null,
+		 options.registerOption(OPTION_NAME_RECOVER_GP, discoverGlobalGPSetting, null,
 			 OPTION_DESCRIPTION_RECOVER_GP);
- 
-		 trySwitchTables = options.getBoolean(OPTION_NAME_SWITCH_TABLE, OPTION_DEFAULT_SWITCH_TABLE);
+ 	}
+
+	@Override
+	public void optionsChanged(Options options, Program program) {
+		super.optionsChanged(options, program);
+
+		 trySwitchTables = options.getBoolean(OPTION_NAME_SWITCH_TABLE, trySwitchTables);
  
 		 markupDualInstructionOption = options.getBoolean(OPTION_NAME_MARK_DUAL_INSTRUCTION,
-			 OPTION_DEFAULT_MARK_DUAL_INSTRUCTION);
+			 markupDualInstructionOption);
  
 		 assumeT9EntryAddress =
-			 options.getBoolean(OPTION_NAME_ASSUME_T9_ENTRY, OPTION_DEFAULT_ASSUME_T9_ENTRY);
+			 options.getBoolean(OPTION_NAME_ASSUME_T9_ENTRY, assumeT9EntryAddress);
  
 		 discoverGlobalGPSetting =
-			 options.getBoolean(OPTION_NAME_RECOVER_GP, OPTION_DEFAULT_RECOVER_GP);
+			 options.getBoolean(OPTION_NAME_RECOVER_GP, discoverGlobalGPSetting);
 	 }
  
  }

@@ -12,18 +12,12 @@ public final class EmotionEngineDemangler {
 	private final DemanglerOptions options;
 
 	public static EmotionEngineDemangler getDemangler(Program program) {
-		if (MetrowerksDemangler.isMetrowerksProgram(program)) {
-			return new EmotionEngineDemangler(new MetrowerksDemangler());
-		}
+
 		return new EmotionEngineDemangler(new GnuDemangler());
 	}
 
 	private EmotionEngineDemangler(GnuDemangler demangler) {
 		this(demangler, new GnuDemanglerOptions(GnuDemanglerFormat.AUTO, true));
-	}
-
-	private EmotionEngineDemangler(MetrowerksDemangler demangler) {
-		this(demangler, new DemanglerOptions());
 	}
 
 	private EmotionEngineDemangler(Demangler demangler, DemanglerOptions options) {

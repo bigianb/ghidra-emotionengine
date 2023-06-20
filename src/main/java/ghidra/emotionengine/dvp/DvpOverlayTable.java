@@ -83,7 +83,7 @@ public final class DvpOverlayTable implements EmotionEngineElfSection {
 				Address addr = elf.getDefaultAddress(
 					scalar.getValue() + base);
 				block = mem.createInitializedBlock(
-					shName, addr, section.getAdjustedSize(),
+					shName, addr, section.getLogicalSize(),
 					(byte) 0, monitor, true);
 				scalar = (Scalar) comp.getComponent(1).getValue();
 				addr = elf.getDefaultAddress(scalar.getValue());
@@ -116,7 +116,7 @@ public final class DvpOverlayTable implements EmotionEngineElfSection {
 		try {
 			MemoryBlock block = mem.createByteMappedBlock(
 				sectionName + "_overlay", addr, sectionAddress, (int) origBlock.getSize(), true);
-			byte[] bytes = new byte[(int) section.getAdjustedSize()];
+			byte[] bytes = new byte[(int) section.getLogicalSize()];
 			MemoryBufferImpl buf = new MemoryBufferImpl(mem, sectionAddress);
 			buf.getBytes(bytes, 0);
 			if (bytes.length > 0) {
