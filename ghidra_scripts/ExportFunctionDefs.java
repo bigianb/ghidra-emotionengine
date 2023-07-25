@@ -65,14 +65,18 @@ public class ExportFunctionDefs extends GhidraScript {
 		SymbolIterator symbolIterator = symbolTable.getDefinedSymbols();
 		while (symbolIterator.hasNext() && !monitor.isCancelled()) {
 			Symbol symbol = symbolIterator.next();
-			if (!symbol.isDynamic() && symbol.isGlobal()){
+			SymbolType type = symbol.getSymbolType();
+			if (!symbol.isDynamic() && symbol.isGlobal() && type == SymbolType.LABEL){
 				String name = symbol.getName();
 				Address address = symbol.getAddress();
+				AddressSpace addressSpace = address.getAddressSpace();
+if (addressSpace.getType() == AddressSpace.TYPE_RAM){
 				JsonObject json = new JsonObject();
 				json.addProperty(NAME, name);
 				json.addProperty(ADDRESS, address.toString());
 
 				gson.toJson(json, jsonWriter);
+}
 			}
 		}
 		jsonWriter.endArray();
