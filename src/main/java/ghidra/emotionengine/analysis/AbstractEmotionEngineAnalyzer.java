@@ -60,6 +60,6 @@ public abstract class AbstractEmotionEngineAnalyzer extends AbstractAnalyzer {
 			.filter(Predicate.not(MemoryBlock::isExecute))
 			.filter(Predicate.not(MemoryBlock::isVolatile))
 			.collect(Collectors.toList());
-		return ProgramMemoryUtil.findString(".img", program, blocks, mem, monitor);
+		return ProgramMemoryUtil.findString(str, program, blocks, mem, monitor);
 	}
 }
