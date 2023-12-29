@@ -510,7 +510,7 @@
 		 };
  
 		 eval.setTrustWritableMemory(trustWriteMemOption)
-			    .setMinpeculativeOffset(minSpeculativeRefAddress)
+			    .setMinSpeculativeOffset(minSpeculativeRefAddress)
 			    .setMaxSpeculativeOffset(maxSpeculativeRefAddress)
 			    .setMinStoreLoadOffset(minStoreLoadRefAddress)
 			    .setCreateComplexDataFromPointers(createComplexDataFromPointers);
