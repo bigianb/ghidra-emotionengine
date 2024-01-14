@@ -1,3 +1,18 @@
+/* ###
+ * IP: GHIDRA
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 // Builds a Ghidra Extension for a given Ghidra installation.
 //
 // An absolute path to the Ghidra installation directory must be supplied either by setting the 
@@ -14,56 +29,35 @@
 // application.gradle.version property in <GHIDRA_INSTALL_DIR>/Ghidra/application.properties
 // for the correction version of Gradle to use for the Ghidra installation you specify.
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
 //----------------------START "DO NOT MODIFY" SECTION------------------------------
 def ghidraInstallDir
 
 if (System.env.GHIDRA_INSTALL_DIR) {
-    ghidraInstallDir = System.env.GHIDRA_INSTALL_DIR
+	ghidraInstallDir = System.env.GHIDRA_INSTALL_DIR
 }
 else if (project.hasProperty("GHIDRA_INSTALL_DIR")) {
-    ghidraInstallDir = project.getProperty("GHIDRA_INSTALL_DIR")
+	ghidraInstallDir = project.getProperty("GHIDRA_INSTALL_DIR")
 }
 
 if (ghidraInstallDir) {
-    apply from: new File(ghidraInstallDir).getCanonicalPath() + "/support/buildExtension.gradle"
+	apply from: new File(ghidraInstallDir).getCanonicalPath() + "/support/buildExtension.gradle"
 }
 else {
-    throw new GradleException("GHIDRA_INSTALL_DIR is not defined!")
+	throw new GradleException("GHIDRA_INSTALL_DIR is not defined!")
 }
 //----------------------END "DO NOT MODIFY" SECTION-------------------------------
 
-repositories { mavenCentral() }
+repositories {
+	// Declare dependency repositories here.  This is not needed if dependencies are manually 
+	// dropped into the lib/ directory.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html for more info.
+	// Ex: mavenCentral()
+}
 
 dependencies {
-	testImplementation "org.hamcrest:hamcrest-all:1.3"
-	testImplementation "org.jmockit:jmockit:1.44"
-	testImplementation "junit:junit:4.12"
-	runtimeOnly fileTree(dir: ghidraInstallDir + '/Ghidra/Framework', include: "**/*.jar")
-	runtimeOnly fileTree(dir: ghidraInstallDir + '/Ghidra/Features', include: "**/*.jar")
-	runtimeOnly fileTree(dir: ghidraInstallDir + '/Ghidra/Processors', include: "**/*.jar")
+	// Any external dependencies added here will automatically be copied to the lib/ directory when
+	// this extension is built.	
 }
 
-eclipse.classpath.file.whenMerged {
-	File javaDoc = new File(ghidraInstallDir+"/docs/GhidraAPI_javadoc.zip");
-	def destroy = [];
-	for (entry in entries) {
-		if (entry.getPath().toString().contains("emotionengine")) {
-			destroy.add(entry);
-			continue;
-		} else if (entry.path.contains('jar')) {
-			File folder = new File(entry.getPath()).getParentFile();
-			for (File file : folder.listFiles()) {
-				if (file.getName().endsWith(".zip")) {
-					entry.setSourcePath(it.fileReference(file));
-					entry.setJavadocPath(it.fileReference(javaDoc));
-				}
-			}
-		}
-	}
-	for (entry in destroy) {
-		entries.remove(entry);
-	}
-}
+// Exclude additional files from the built extension
+// Ex: buildExtension.exclude '.idea/**'

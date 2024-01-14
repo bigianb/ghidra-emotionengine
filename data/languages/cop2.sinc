@@ -12,7 +12,7 @@ define pcodeop VCALLMS;
 define pcodeop VCALLMSR;
 
 # COP2 floating point registers
-define register offset=0x4100 size=16 [
+define register offset=0x4000 size=16 [
     vf0     vf1     vf2     vf3
     vf4     vf5     vf6     vf7
     vf8     vf9     vf10    vf11
@@ -23,7 +23,7 @@ define register offset=0x4100 size=16 [
     vf28    vf29    vf30    vf31
 ];
 
-define register offset=0x4100 size=4 [
+define register offset=0x4000 size=4 [
     vf0x        vf0y        vf0z        vf0w
     vf1x        vf1y        vf1z        vf1w
     vf2x        vf2y        vf2z        vf2w
@@ -59,22 +59,22 @@ define register offset=0x4100 size=4 [
 ];
 
 define register offset=0x4300 size=2 [
-     vi0  _ _ _  _ _ _ _
-     vi1  _ _ _  _ _ _ _
-     vi2  _ _ _  _ _ _ _
-     vi3  _ _ _  _ _ _ _
-     vi4  _ _ _  _ _ _ _
-     vi5  _ _ _  _ _ _ _
-     vi6  _ _ _  _ _ _ _
-     vi7  _ _ _  _ _ _ _
-     vi8  _ _ _  _ _ _ _
-     vi9  _ _ _  _ _ _ _
-     vi10 _ _ _  _ _ _ _
-     vi11 _ _ _  _ _ _ _
-     vi12 _ _ _  _ _ _ _
-     vi13 _ _ _  _ _ _ _
-     vi14 _ _ _  _ _ _ _
-     vi15 _ _ _  _ _ _ _
+    vi0  _
+    vi1  _
+    vi2  _
+    vi3  _
+    vi4  _
+    vi5  _
+    vi6  _
+    vi7  _
+    vi8  _
+    vi9  _
+    vi10 _
+    vi11 _
+    vi12 _
+    vi13 _
+    vi14 _
+    vi15 _
 ];
 
 #obtained from pcsx2 VU.h
@@ -95,33 +95,31 @@ define register offset=0x4300 size=4 [
     vucr13
     vucr14
     vucr15
-    vuStatus_32
-    vuMAC_32
-    vuCF_32
+    vuStatus
+    MAC
+    CF_32
     _
-    vuR_32
-    vuI
+    R
+    I
     Q
     P
-    vf0_flag
     _
-    vuTCP_32
-    vuCMSAR0_32
-    vuFBRST
-    vpu_STAT
     _
-    vuCMSAR1_32
+    TPC
+    CMSAR0
+    FBRST
+    VPU_STAT
+    _
+    CMSAR1
 ];
+
+define register offset=0x4348 size=3 CF;
 
 
 define register offset=0x4400 size=16 vuACC;
 define register offset=0x4400 size=4 [vuACCw vuACCz vuACCy vuACCx];
 
-define register offset=0x4468 size=2 TCP;
-define register offset=0x446C size=2 CMSAR0;
-define register offset=0x447C size=2 CMSAR1;
-
-attach variables [ vuft vufd vufd_qmc2 vufs vuft_L vufd_L vufs_L ] [
+attach variables [ vuft vufd vufdqm vufs vurd vuft_L vufd_L vufs_L ] [
     vf0     vf1     vf2     vf3
     vf4     vf5     vf6     vf7
     vf8     vf9     vf10    vf11
@@ -130,6 +128,50 @@ attach variables [ vuft vufd vufd_qmc2 vufs vuft_L vufd_L vufs_L ] [
     vf20    vf21    vf22    vf23
     vf24    vf25    vf26    vf27
     vf28    vf29    vf30    vf31
+];
+
+attach variables [ vuftw vufdw vufsw ] [
+    vf0w     vf1w     vf2w     vf3w
+    vf4w     vf5w     vf6w     vf7w
+    vf8w     vf9w     vf10w    vf11w
+    vf12w    vf13w    vf14w    vf15w
+    vf16w    vf17w    vf18w    vf19w
+    vf20w    vf21w    vf22w    vf23w
+    vf24w    vf25w    vf26w    vf27w
+    vf28w    vf29w    vf30w    vf31w
+];
+
+attach variables [ vuftx vufdx vufsx ] [
+    vf0x     vf1x     vf2x     vf3x
+    vf4x     vf5x     vf6x     vf7x
+    vf8x     vf9x     vf10x    vf11x
+    vf12x    vf13x    vf14x    vf15x
+    vf16x    vf17x    vf18x    vf19x
+    vf20x    vf21x    vf22x    vf23x
+    vf24x    vf25x    vf26x    vf27x
+    vf28x    vf29x    vf30x    vf31x
+];
+
+attach variables [ vufty vufdy vufsy ] [
+    vf0y     vf1y     vf2y     vf3y
+    vf4y     vf5y     vf6y     vf7y
+    vf8y     vf9y     vf10y    vf11y
+    vf12y    vf13y    vf14y    vf15y
+    vf16y    vf17y    vf18y    vf19y
+    vf20y    vf21y    vf22y    vf23y
+    vf24y    vf25y    vf26y    vf27y
+    vf28y    vf29y    vf30y    vf31y
+];
+
+attach variables [ vuftz vufdz vufsz ] [
+    vf0z     vf1z     vf2z     vf3z
+    vf4z     vf5z     vf6z     vf7z
+    vf8z     vf9z     vf10z    vf11z
+    vf12z    vf13z    vf14z    vf15z
+    vf16z    vf17z    vf18z    vf19z
+    vf20z    vf21z    vf22z    vf23z
+    vf24z    vf25z    vf26z    vf27z
+    vf28z    vf29z    vf30z    vf31z
 ];
 
 attach variables [ vuit vuis vuid ] [
@@ -148,77 +190,161 @@ attach variables vuccid [
     vucr4  vucr5  vucr6  vucr7
     vucr8  vucr9  vucr10 vucr11
     vucr12 vucr13 vucr14 vucr15
-    vuStatus_32 vuMAC_32 vuCF_32 _
-    vuR_32 vuI Q _
-    _ _ vuTCP_32 vuCMSAR0_32
-    vuFBRST vpu_STAT _ vuCMSAR1_32
+    vuStatus _ CF_32 _
+    R I Q _
+    _ _ TPC CMSAR0
+    FBRST VPU_STAT _ CMSAR1
 ];
 
 macro ssum(src, dest) {
     dest = (src[32,32] f* src[32,32]) f+ (src[64,32] f* src[64,32]) f+ (src[96,32] f* src[96,32]);
 }
 
-VI: immfloat is vucI_L=1 & immfloat {tmp:4 = float2float(immfloat:4); vuI = tmp; export tmp;}
-
-vuinst: is prime=18 & vuco=1 & microMode=0 { export 0:1; }
-
-with : microMode=1 & vuco=0 & vuco1=0 {
-    with V1E: {
-        : " [E]" is vucE=1 [cE=1; globalset(inst_next, cE);] { delayslot(2); return [0:4]; }
-        : is vucE=0 {}
-    }
-    with V1M: {
-        : " [M]" is vucM=1 [ cM = 1; globalset(inst_start, cM); ] {}
-        : is vucM=0 {}
-    }
-    with V1D: {
-        : " [D]" is vucD=1 { trap(); }
-        : is vucD=0 {}
-    }
-    with V1T: {
-        : " [T]" is vucT=1 { trap(); }
-        : is vucT=0 {}
-    }
+with dest: {
+	: ""      is vudest=0b0000 {}
+	: ".w"    is vudest=0b0001 {}
+	: ".z"    is vudest=0b0010 {}
+	: ".zw"   is vudest=0b0011 {}
+	: ".y"    is vudest=0b0100 {}
+	: ".yw"   is vudest=0b0101 {}
+	: ".yz"   is vudest=0b0110 {}
+	: ".yzw"  is vudest=0b0111 {}
+	: ".x"    is vudest=0b1000 {}
+	: ".xw"   is vudest=0b1001 {}
+	: ".xz"   is vudest=0b1010 {}
+	: ".xzw"  is vudest=0b1011 {}
+	: ".xy"   is vudest=0b1100 {}
+	: ".xyw"  is vudest=0b1101 {}
+	: ".xyz"  is vudest=0b1110 {}
+	: ".xyzw" is vudest=0b1111 {}
 }
 
-with : microMode=1 & vuMicro=0 & cUpper=0 {
-    with V1E_L: {
-        :" [E]" is vucE_L=1 [cE=1; globalset(inst_next, cE);] { delayslot(1); return [0:4]; }
-        : is vucE_L=0 {}
-    }
-    with V1M_L: {
-        : " [M]" is vucM_L=1 [ cM = 1; globalset(inst_start, cM); ] {}
-        : is vucM_L=0 {}
-    }
-    with V1D_L: {
-        : " [D]" is vucD_L=1 { trap(); }
-        : is vucD_L=0 {}
-    }
-    with V1T_L: {
-        : " [T]" is vucT_L=1 { trap(); }
-        : is vucT_L=0 {}
-    }
+with idest: {
+	: ".w"    is vudest=0b0001 {}
+	: ".z"    is vudest=0b0010 {}
+	: ".y"    is vudest=0b0100 {}
+	: ".x"    is vudest=0b1000 {}
 }
 
-VUFLAGS:^V1E^V1M^V1D^V1T is cUpper=1 & V1E & V1M & V1D & V1T [cUpper=0; globalset(inst_next, cUpper);] { build V1D; build V1T; }
-VUFLAGS_L:^V1E_L^V1M_L^V1D_L^V1T_L is V1E_L & V1M_L & V1D_L & V1T_L { build V1D_L; build V1T_L; }
-
-with VUIT: {
-    :vuit is vuit { export vuit; }
-    :vuit is vuit & vuit=0 { export 0:2; }
-}
-with VUIS: {
-    :vuis is vuis { export vuis; }
-    :vuis is vuis & vuis=0 { export 0:2; }
-}
-with VUID: {
-    :vuid is vuid { export vuid; }
-    :vuid is vuid & vuid=0 { export 0:2; }
+with IDEST_OFFSET: {
+	: (vuis)^" w" is vudest=0b0001 & vuis { export 96:4; }
+	: (vuis)^" z" is vudest=0b0010 & vuis { export 64:4; }
+	: (vuis)^" y" is vudest=0b0100 & vuis { export 32:4; }
+	: (vuis)^" x" is vudest=0b1000 & vuis { export 0:4;  }
 }
 
-VU_OFF_BASE_IT: vusimm11(VUIT) is vusimm11 & VUIT { tmp:4 = zext((VUIT + vusimm11))*16; export tmp; }
-VU_OFF_BASE_IS: vusimm11(VUIS) is vusimm11 & VUIS { tmp:4 = zext((VUIS + vusimm11))*16; export tmp; }
-VIF0_ITOP: is epsilon {tmp:4 = 0x100038d0; export tmp;}
-VIF1_ITOP: is epsilon {tmp:4 = 0x10003cd0; export tmp;}
-VIF1_TOP: is epsilon {tmp:4 = 0x10003ce0; export tmp;}
-D2_TADR: is VUIS { tmp:4 = 0x1000a030; export tmp;}
+VUMEMDEST: IDEST_OFFSET is IDEST_OFFSET & vuis { addr:4 = (zext(vuis)*16) + IDEST_OFFSET; export addr; }
+
+with fsf: {
+	: ".x"     is vufsf=0 & vufs { tmp:4 = vufs[0,32]; export tmp; }
+	: ".y"     is vufsf=1 & vufs { tmp:4 = vufs[32,32]; export tmp; }
+	: ".z"     is vufsf=2 & vufs { tmp:4 = vufs[64,32]; export tmp; }
+	: ".w"     is vufsf=3 & vufs { tmp:4 = vufs[96,32]; export tmp; }
+	: ".x"     is vufsf=0 & vufs=0 { tmp:4 = int2float(0:4); export tmp; }
+	: ".y"     is vufsf=1 & vufs=0 { tmp:4 = int2float(0:4); export tmp; }
+	: ".z"     is vufsf=2 & vufs=0 { tmp:4 = int2float(0:4); export tmp; }
+	: ".w"     is vufsf=3 & vufs=0 { tmp:4 = int2float(1:4); export tmp; }
+}
+
+with ftf: {
+	: ".x"     is vuftf=0 & vuft { tmp:4 = vuft[0,32]; export tmp; }
+	: ".y"     is vuftf=1 & vuft { tmp:4 = vuft[32,32]; export tmp; }
+	: ".z"     is vuftf=2 & vuft { tmp:4 = vuft[64,32]; export tmp; }
+	: ".w"     is vuftf=3 & vuft { tmp:4 = vuft[96,32]; export tmp; }
+	: ".x"     is vuftf=0 & vuft=0 { tmp:4 = int2float(0:4); export tmp; }
+	: ".y"     is vuftf=1 & vuft=0 { tmp:4 = int2float(0:4); export tmp; }
+	: ".z"     is vuftf=2 & vuft=0 { tmp:4 = int2float(0:4); export tmp; }
+	: ".w"     is vuftf=3 & vuft=0 { tmp:4 = int2float(1:4); export tmp; }
+}
+
+VUFS: vufs^dest is vufs & dest {}
+VUFSX: is vufsx { export vufsx; }
+VUFSY: is vufsy { export vufsy; }
+VUFSZ: is vufsz { export vufsz; }
+VUFSW: is vufsw { export vufsw; }
+VUFSX: is vufsx & vufsx=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFSY: is vufsy & vufsy=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFSZ: is vufsz & vufsz=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFSW: is vufsw & vufsw=0 { tmp:4 = int2float(1:4); export *[const]:4 tmp; }
+
+VUFT: vuft^dest is vuft & dest {}
+VUFTX: is vuftx { export vuftx; }
+VUFTY: is vufty { export vufty; }
+VUFTZ: is vuftz { export vuftz; }
+VUFTW: is vuftw { export vuftw; }
+VUFTX: is vuftx & vuftx=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFTY: is vufty & vufty=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFTZ: is vuftz & vuftz=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFTW: is vuftw & vuftw=0 { tmp:4 = int2float(1:4); export *[const]:4 tmp; }
+
+VUFD: vufd^dest is vufd & dest {}
+VUFDX: is vufdx { export vufdx; }
+VUFDY: is vufdy { export vufdy; }
+VUFDZ: is vufdz { export vufdz; }
+VUFDW: is vufdw { export vufdw; }
+VUFDX: is vufdx & vufdx=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFDY: is vufdy & vufdy=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFDZ: is vufdz & vufdz=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+VUFDW: is vufdw & vufdw=0 { tmp:4 = int2float(1:4); export *[const]:4 tmp; }
+
+VUACC: "ACC"^dest is dest {}
+VUACCX: is epsilon { export vuACCx; }
+VUACCY: is epsilon { export vuACCy; }
+VUACCZ: is epsilon { export vuACCz; }
+VUACCW: is epsilon { export vuACCw; }
+
+with bc: {
+	: "x"     is vuft & vubc=0 {}
+	: "y"     is vuft & vubc=1 {}
+	: "z"     is vuft & vubc=2 {}
+	: "w"     is vuft & vubc=3 {}
+}
+
+with VUFTBC: {
+	: vuft^"x"     is vuft & VUFTX & vubc=0 { export VUFTX; }
+	: vuft^"y"     is vuft & VUFTY & vubc=1 { export VUFTY; }
+	: vuft^"z"     is vuft & VUFTZ & vubc=2 { export VUFTZ; }
+	: vuft^"w"     is vuft & VUFTW & vubc=3 { export VUFTW; }
+	: vuft^"x"     is vuft & vubc=0 & vuft=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+	: vuft^"y"     is vuft & vubc=1 & vuft=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+	: vuft^"z"     is vuft & vubc=2 & vuft=0 { tmp:4 = int2float(0:4); export *[const]:4 tmp; }
+	: vuft^"w"     is vuft & vubc=3 & vuft=0 { tmp:4 = int2float(1:4); export *[const]:4 tmp; }
+}
+
+VUOP0X: is VUFDX { export VUFDX; }
+VUOP0Y: is VUFDY { export VUFDY; }
+VUOP0Z: is VUFDZ { export VUFDZ; }
+VUOP0W: is VUFDW { export VUFDW; }
+VUOP0X: is accflag=1 & VUACCX { export VUACCX; }
+VUOP0Y: is accflag=1 & VUACCY { export VUACCY; }
+VUOP0Z: is accflag=1 & VUACCZ { export VUACCZ; }
+VUOP0W: is accflag=1 & VUACCW { export VUACCW; }
+
+VUOP2X: is bcflag=1 & VUFTBC { export VUFTBC; }
+VUOP2Y: is bcflag=1 & VUFTBC { export VUFTBC; }
+VUOP2Z: is bcflag=1 & VUFTBC { export VUFTBC; }
+VUOP2W: is bcflag=1 & VUFTBC { export VUFTBC; }
+VUOP2X: is VUFTX { export VUFTX; }
+VUOP2Y: is VUFTY { export VUFTY; }
+VUOP2Z: is VUFTZ { export VUFTZ; }
+VUOP2W: is VUFTW { export VUFTW; }
+VUOP2X: is iflag=1 { export I; }
+VUOP2Y: is iflag=1 { export I; }
+VUOP2Z: is iflag=1 { export I; }
+VUOP2W: is iflag=1 { export I; }
+VUOP2X: is qflag=1 { export Q; }
+VUOP2Y: is qflag=1 { export Q; }
+VUOP2Z: is qflag=1 { export Q; }
+VUOP2W: is qflag=1 { export Q; }
+
+define pcodeop interlock;
+define pcodeop getCop2ConditionSignal;
+define pcodeop WAIT;
+define pcodeop VRAND;
+define pcodeop VRINIT;
+define pcodeop VRXOR;
+
+COP2: is vucop2=18 {}
+
+INTERLOCK: ""   is bit0=0 {}
+INTERLOCK: ".I"  is bit0=1 { interlock(); }

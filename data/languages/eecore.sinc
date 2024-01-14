@@ -6,8 +6,6 @@ define pcodeop countLeadingZeros;
 # countLeadingOnes(val)
 define pcodeop countLeadingOnes;
 
-define register offset=0x400 size=8 [ fsa ];       # 64 bit
-
 # 0111 10bb bbbt tttt iiii iiii iiii iiii
 :lq RT128, OFF_BASE    is microMode=0 & prime=30 & OFF_BASE & RT128 {
     RT128[0,32] = *:4 OFF_BASE;

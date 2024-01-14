@@ -6,7 +6,7 @@ define pcodeop trap;
 define pcodeop prefetch;
 define pcodeop syscall;
 
-    with : microMode=0 {
+with : microMode=0 {
 
     # 0000 00ss ssst tttt dddd d000 0010 0000
     :add RD32, RS32src, RT32src				is prime=0 & zero5=0 & fct=32 & RD32 & RS32src & RT32src & RD {

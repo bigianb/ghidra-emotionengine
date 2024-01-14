@@ -8,10 +8,11 @@
 #  5. COP2 (VU) Macro Instruction Set
 
 define endian=little;
-define alignment=2;
+define alignment=4;
 
 define space ram type=ram_space size=4 default;
 define space register type=register_space size=4;
+define space vumem type=ram_space size=4;
 
 @include "base.sinc"
 @include "mips.sinc"
@@ -20,6 +21,6 @@ define space register type=register_space size=4;
 @include "cop0.sinc"
 @include "cop1.sinc"
 @include "cop2.sinc"
-@include "vuupper.sinc"
-@include "vulower.sinc"
+@include "vuops.sinc"
+@include "vumacro.sinc"
 @include "mmio.sinc"

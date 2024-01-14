@@ -205,7 +205,7 @@ define ram offset=0x1000F220 size=0x4   [ REG_SIF_MSFLAG           ]; # EE->IOP 
 define ram offset=0x1000F230 size=0x4   [ REG_SIF_SMFLAG           ]; # IOP->EE flags
 define ram offset=0x1000F240 size=0x4   [ REG_SIF_CONTROL          ]; # Control register
 define ram offset=0x1000F250 size=0x4   [ REG_SIF_F250             ];
-define ram offset=0x1000F260 size=0x4   [ REG_SIF_F260             ];
+define ram offset=0x1000F260 size=0x4   [ REG_SIF_BD6              ];
 define ram offset=0x1000F300 size=0x4   [ REG_SIF_F300             ];
 define ram offset=0x1000F380 size=0x4   [ REG_SIF_F380             ];
 

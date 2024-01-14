@@ -2,4 +2,7 @@
   <language id="r5900:LE:*:*">
     <patternfile>r5900_LE_patterns.xml</patternfile>
   </language>
+  <language id="r3000:LE:*:*">
+    <patternfile>r5900_LE_patterns.xml</patternfile>
+  </language>
 </patternconstraints>
