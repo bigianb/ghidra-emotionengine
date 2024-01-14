@@ -37,10 +37,9 @@ public class IOP_ElfRelocationHandler extends MIPS_ElfRelocationHandler {
 	private static final int R_MIPS_MHI16 = 0xfa;
 	private static final int R_MIPS_ADDEND = 0xfb;
 
-	private static final String ILLEGAL_RELOCATION_MESSAGE =
-		"Illegal R_MIPS_MHI16 Relocation in ET_IRX2 IopModule";
-	private static final String ILLEGAL_MHI16_MESSAGE =
-		"R_MIPS_MHI16 not followed by R_MIPS_ADDEND";
+	private static final String ILLEGAL_RELOCATION_MESSAGE = "Illegal R_MIPS_MHI16 Relocation in ET_IRX2 IopModule";
+	private static final String ILLEGAL_MHI16_MESSAGE = "R_MIPS_MHI16 not followed by R_MIPS_ADDEND";
+	private static final String ILLEGAL_HI16_MESSAGE = "R_MIPS_HI16 not followed by R_MIPS_LO16";
 
 	private static final int LOW_MASK = 0xffff;
 	private static final int HIGH_MASK = 0xffff0000;
@@ -85,16 +84,14 @@ public class IOP_ElfRelocationHandler extends MIPS_ElfRelocationHandler {
 				newValue |= (value << 4) >> 6;
 				break;
 			case R_MIPS_MHI16:
+			{
 				if (elfRelocationContext.getElfHeader().e_type() == ET_IRX2) {
-					markAsError(program, relocationAddress, relocation.getType(),
-						symbolName, ILLEGAL_RELOCATION_MESSAGE, log);
+					markAsError(program, relocationAddress, relocation.getType(), symbolName, ILLEGAL_RELOCATION_MESSAGE, log);
 					return RelocationResult.FAILURE;
 				}
-				ElfRelocation nextReloc = getNextRelocation(
-					elfRelocationContext, relocation);
+				ElfRelocation nextReloc = getNextRelocation(elfRelocationContext, relocation);
 				if (nextReloc == null || nextReloc.getType() != R_MIPS_ADDEND) {
-					markAsError(program, relocationAddress, relocation.getType(),
-						symbolName, ILLEGAL_MHI16_MESSAGE, log);
+					markAsError(program, relocationAddress, relocation.getType(), symbolName, ILLEGAL_MHI16_MESSAGE, log);
 					return RelocationResult.FAILURE;
 				}
 				value =  (int) nextReloc.getOffset()+base;
@@ -112,16 +109,40 @@ public class IOP_ElfRelocationHandler extends MIPS_ElfRelocationHandler {
 					byteLength += 4;
 				} while(offset != 0);
 				return new RelocationResult(Status.APPLIED, byteLength);
-			
-			
-			
+			}
+			case MIPS_ElfRelocationConstants.R_MIPS_HI16:
+			{
+				ElfRelocation loReloc = getNextRelocation(elfRelocationContext, relocation);
+				if (loReloc == null || loReloc.getType() != MIPS_ElfRelocationConstants.R_MIPS_LO16) {
+					markAsError(program, relocationAddress, relocation.getType(), symbolName, ILLEGAL_HI16_MESSAGE, log);
+					return RelocationResult.FAILURE;
+				}
+				var loOffset = loReloc.getOffset();
+				var hiOffset = relocation.getOffset();
+				var diff = loOffset - hiOffset;
+				var loAddress = relocationAddress.addWrap(diff);
+				
+				int oldLoValue = memory.getInt(loAddress);
+				int fullOldValue = (oldValue << 16) | (oldLoValue & 0xFFFF);
+				int fullNewValue = fullOldValue + base;
+				
+				newValue = oldValue & HIGH_MASK;
+				newValue |= (fullNewValue >> 16) & LOW_MASK;
+				
+				int newLoValue = oldLoValue & HIGH_MASK;
+				newLoValue |= fullNewValue & LOW_MASK;
+				
+				memory.setInt(loAddress, newLoValue);
+				
+			}
+			case MIPS_ElfRelocationConstants.R_MIPS_LO16:
+			{
+				// dealt with by HI16
+				return new RelocationResult(Status.APPLIED, 4);
+			}
 			default:
 				String msg = String.format("Unexpected relocation type %d", relocation.getType());
 				bMan.setBookmark(relocationAddress, BookmarkType.ERROR, BookmarkType.ERROR, msg);
-			case MIPS_ElfRelocationConstants.R_MIPS_NONE:
-			case MIPS_ElfRelocationConstants.R_MIPS_HI16:
-			case MIPS_ElfRelocationConstants.R_MIPS_LO16:
-			case MIPS_ElfRelocationConstants.R_MIPS_GPREL16:
 				return RelocationResult.UNSUPPORTED;
 		}
 
